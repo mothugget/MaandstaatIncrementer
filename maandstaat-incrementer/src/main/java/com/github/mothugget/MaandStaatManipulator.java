@@ -48,9 +48,6 @@ public class MaandStaatManipulator {
                 // }
 
                 if (cell!=null && cell.getCellType() == CellType.FORMULA && DateUtil.isCellDateFormatted(cell)) {
-                    FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
-                    CellValue cellValue = evaluator.evaluate(cell);
-                    // System.out.println(cellValue);
                     Date cellDate = cell.getDateCellValue();
                     LocalDate localDate = cellDate.toInstant()
                             .atZone(ZoneId.systemDefault())
