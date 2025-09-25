@@ -13,7 +13,7 @@ public class Main {
             return;
         }
         Dotenv dotenv = Dotenv.load();
-        System.out.println(dotenv.get("TEST"));
+        System.out.println("env Value" + dotenv.get("TEST"));
         // Collect arguments into one string
         String input = String.join(" ", args);
 
@@ -26,5 +26,6 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
+        MaandStaatManipulator manipulator= new MaandStaatManipulator("/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm",1,"","Bidfood");
     }
 }
