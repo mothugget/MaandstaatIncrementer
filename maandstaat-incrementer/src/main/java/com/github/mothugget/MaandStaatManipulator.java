@@ -12,16 +12,32 @@ import java.util.Date;
 
 public class MaandStaatManipulator {
     private String filePath;
-    private Float hours;
+    private float hours;
     private String description;
     private String customer;
 
     public MaandStaatManipulator(String filePath, float hours, String description, String customer) {
-        this.filePath = filePath;
-        this.hours = hours;
-        this.description = description;
-        this.customer = customer;
         updateFile(filePath, hours, description, customer);
+    }
+
+    private Row getTodaysRow(Sheet sheet) {
+        LocalDate today = LocalDate.now();
+        Row todayRow = null;
+        System.err.println("assigned");
+        for (Row row : sheet) {
+            Cell cell = row.getCell(1);
+            if (cell != null && cell.getCellType() == CellType.FORMULA && DateUtil.isCellDateFormatted(cell)) {
+                Date cellDate = cell.getDateCellValue();
+                LocalDate localDate = cellDate.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+                if (localDate.equals(today)) {
+                    todayRow = row;
+                    break;
+                }
+            }
+        }
+        return todayRow;
     }
 
     private void updateFile(String filePath, Float hours, String description, String customer) {
@@ -30,58 +46,31 @@ public class MaandStaatManipulator {
 
             // Get the first sheet (index 0) – or use workbook.getSheet("SheetName")
             Sheet sheet = workbook.getSheet(customer);
-            LocalDate today = LocalDate.now();
-            int foundRow = -1;
 
             if (sheet == null) {
                 System.out.println("Customer not found! Check sheet name");
                 return;
             }
+            Row row = getTodaysRow(sheet);
 
-            for (Row row : sheet) {
-
-                Cell cell = row.getCell(1);
-                // try {
-                //     System.out.println(cell.getNumericCellValue());
-                // } catch (Exception e) {
-                //     System.out.println("oops" + e);
-                // }
-
-                if (cell!=null && cell.getCellType() == CellType.FORMULA && DateUtil.isCellDateFormatted(cell)) {
-                    Date cellDate = cell.getDateCellValue();
-                    LocalDate localDate = cellDate.toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
-                    System.out.println(localDate);
-                    if (localDate.equals(today)) {
-                        foundRow = row.getRowNum();
-                        break;
-                    }
-                }
-
-                if (foundRow != -1)
-                    break;
+            if (row == null) {
+                System.out.println("Cant find todays date");
             }
-            System.out.println("Todays date on row " + foundRow);
-            // // A4 = row 3 (0-based index), column 0
-            // Row row = sheet.getRow(3);
-            // if (row == null) {
-            // row = sheet.createRow(3);
-            // }
-            // Cell cell = row.getCell(0);
-            // if (cell == null) {
-            // cell = row.createCell(0);
-            // }
+            Cell descriptionCell = row.getCell(3);
+            if (descriptionCell == null) {
+                descriptionCell = row.createCell(3);
+            }
+            String oldDescriptionValue=descriptionCell.getStringCellValue();
+            System.out.println(oldDescriptionValue);
+            // Set new value
+            //descriptionCell.setCellValue("Hello from Apache POI");
 
-            // // Set new value
-            // cell.setCellValue("Hello from Apache POI");
+            // Save back to the same file
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                workbook.write(fos);
+            }
 
-            // // Save back to the same file
-            // try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            // workbook.write(fos);
-            // }
-
-            // System.out.println("Cell A4 updated successfully!");
+            System.out.println("Cell A4 updated successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();

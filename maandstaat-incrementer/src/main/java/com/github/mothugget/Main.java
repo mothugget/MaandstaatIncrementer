@@ -26,6 +26,6 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
-        MaandStaatManipulator manipulator= new MaandStaatManipulator("/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm",1,"","Bidfood");
+        MaandStaatManipulator manipulator= new MaandStaatManipulator("/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm",1,"","Rijkzwaan");
     }
 }
