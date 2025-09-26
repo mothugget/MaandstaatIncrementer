@@ -11,10 +11,6 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class MaandStaatManipulator {
-    private String filePath;
-    private float hours;
-    private String description;
-    private String customer;
 
     public MaandStaatManipulator(String filePath, float hours, String description, String customer) {
         updateFile(filePath, hours, description, customer);
@@ -23,7 +19,6 @@ public class MaandStaatManipulator {
     private Row getTodaysRow(Sheet sheet) {
         LocalDate today = LocalDate.now();
         Row todayRow = null;
-        System.err.println("assigned");
         for (Row row : sheet) {
             Cell cell = row.getCell(1);
             if (cell != null && cell.getCellType() == CellType.FORMULA && DateUtil.isCellDateFormatted(cell)) {
@@ -65,14 +60,14 @@ public class MaandStaatManipulator {
             if (hoursCell == null) {
                 hoursCell = row.createCell(4);
             }
-            String oldDescriptionValue=descriptionCell.getStringCellValue();
-            float oldHoursValue=(float)hoursCell.getNumericCellValue();
-
-            String newDescriptionValue=oldDescriptionValue+"/"+description;
-            float newHoursValue=oldHoursValue+hours;
-            System.out.println(newDescriptionValue);
-            System.out.println(newHoursValue);
+            String oldDescriptionValue = descriptionCell.getStringCellValue();
+            float oldHoursValue = (float) hoursCell.getNumericCellValue();
+            String delimiter=(oldDescriptionValue=="")? "":"/";
             
+            String newDescriptionValue = oldDescriptionValue + delimiter + description;
+            float newHoursValue = oldHoursValue + hours;
+            System.out.println("New description - " + newDescriptionValue);
+            System.out.println("New hours - " + newHoursValue);
             descriptionCell.setCellValue(newDescriptionValue);
             hoursCell.setCellValue(newHoursValue);
 

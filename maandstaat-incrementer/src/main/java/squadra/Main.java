@@ -22,7 +22,7 @@ public class Main {
         }
         String customer = args[0];
         String description = args[1];
-        System.out.println("Customer - " + customer + " | Description - " + description);
+
         float hours = 1;
         if (args.length > 2) {
             try {
@@ -33,6 +33,8 @@ public class Main {
             }
         }
 
+        System.out.println("Customer: " + customer + " | Description: " + description+" | Hours: "+hours);
+
         Dotenv dotenv = Dotenv.load();
         String filePath = dotenv.get("FILE_PATH");
         // Collect arguments into one string
@@ -40,10 +42,10 @@ public class Main {
 
         // Append to log.txt
 
-        MaandStaatManipulator manipulator = new MaandStaatManipulator(filePath, hours, description, customer);
+        new MaandStaatManipulator(filePath, hours, description, customer);
         try (FileWriter writer = new FileWriter("log.txt", true)) {
             writer.write(LocalDateTime.now() + " - " + input + System.lineSeparator());
-            System.out.println("Hour commit added to log file");
+            System.out.println("Commit added to log file");
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
