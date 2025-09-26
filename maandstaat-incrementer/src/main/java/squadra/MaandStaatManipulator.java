@@ -1,4 +1,4 @@
-package com.github.mothugget;
+package squadra;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -61,18 +61,27 @@ public class MaandStaatManipulator {
             if (descriptionCell == null) {
                 descriptionCell = row.createCell(3);
             }
+            Cell hoursCell = row.getCell(4);
+            if (hoursCell == null) {
+                hoursCell = row.createCell(4);
+            }
             String oldDescriptionValue=descriptionCell.getStringCellValue();
-            System.out.println(oldDescriptionValue);
-            System.err.println(description);
-            // Set new value
-            //descriptionCell.setCellValue("Hello from Apache POI");
+            float oldHoursValue=(float)hoursCell.getNumericCellValue();
+
+            String newDescriptionValue=oldDescriptionValue+"/"+description;
+            float newHoursValue=oldHoursValue+hours;
+            System.out.println(newDescriptionValue);
+            System.out.println(newHoursValue);
+            
+            descriptionCell.setCellValue(newDescriptionValue);
+            hoursCell.setCellValue(newHoursValue);
 
             // Save back to the same file
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 workbook.write(fos);
             }
 
-            System.out.println("Cell A4 updated successfully!");
+            System.out.println("Maanstaat updated successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.github.mothugget;
+package squadra;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,12 +39,14 @@ public class Main {
         String input = String.join(" ", args);
 
         // Append to log.txt
+
+        MaandStaatManipulator manipulator = new MaandStaatManipulator(filePath, hours, description, customer);
         try (FileWriter writer = new FileWriter("log.txt", true)) {
             writer.write(LocalDateTime.now() + " - " + input + System.lineSeparator());
+            System.out.println("Hour commit added to log file");
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
-        MaandStaatManipulator manipulator = new MaandStaatManipulator(filePath, hours, description, customer);
     }
 
     public static boolean isNumeric(String str) {
