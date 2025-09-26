@@ -9,16 +9,34 @@ public class Main {
     public static void main(String[] args) {
         // If no arguments provided
         if (args.length == 0) {
-            System.out.println("Usage: java -jar target/maandstaat-incrementer-1.0-SNAPSHOT.jar [arguments]");
+            System.out.println("Need the following args <customer> <description> (<hours> - default is 1)");
             return;
         }
+        if (args.length < 2) {
+            System.out.println("Need the following args <customer> <description> (<hours>  - default is 1)");
+            return;
+        }
+        if (isNumeric(args[0]) || isNumeric(args[1])) {
+            System.out.println("First two arguments must be strings (customer, description).");
+            return;
+        }
+        String customer = args[0];
+        String description = args[1];
+        System.out.println("Customer - " + customer + " | Description - " + description);
+        float hours = 1;
+        if (args.length > 2) {
+            try {
+                hours = Float.parseFloat(args[2]);
+            } catch (NumberFormatException e) {
+                System.out.println("Error: hours must be a number");
+                return;
+            }
+        }
+
         Dotenv dotenv = Dotenv.load();
-        System.out.println("env Value" + dotenv.get("TEST"));
+        String filePath = dotenv.get("FILE_PATH");
         // Collect arguments into one string
         String input = String.join(" ", args);
-
-        // Print to console
-        System.out.println("Received arguments: " + input);
 
         // Append to log.txt
         try (FileWriter writer = new FileWriter("log.txt", true)) {
@@ -26,6 +44,10 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
-        MaandStaatManipulator manipulator= new MaandStaatManipulator("/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm",1,"","Rijkzwaan");
+        MaandStaatManipulator manipulator = new MaandStaatManipulator(filePath, hours, description, customer);
+    }
+
+    public static boolean isNumeric(String str) {
+        return str != null && str.matches("-?\\d+(\\.\\d+)?");
     }
 }

@@ -55,6 +55,7 @@ public class MaandStaatManipulator {
 
             if (row == null) {
                 System.out.println("Cant find todays date");
+                return;
             }
             Cell descriptionCell = row.getCell(3);
             if (descriptionCell == null) {
@@ -62,6 +63,7 @@ public class MaandStaatManipulator {
             }
             String oldDescriptionValue=descriptionCell.getStringCellValue();
             System.out.println(oldDescriptionValue);
+            System.err.println(description);
             // Set new value
             //descriptionCell.setCellValue("Hello from Apache POI");
 
