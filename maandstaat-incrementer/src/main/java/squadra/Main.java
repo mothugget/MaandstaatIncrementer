@@ -42,7 +42,8 @@ public class Main {
 
         // Append to log.txt
 
-        new MaandStaatManipulator(filePath, hours, description, customer);
+        MaandStaatManipulator manipulator = new MaandStaatManipulator();
+        manipulator.updateFile(filePath, hours, description, customer);
         try (FileWriter writer = new FileWriter("log.txt", true)) {
             writer.write(LocalDateTime.now() + " - " + input + System.lineSeparator());
             System.out.println("Commit added to log file");

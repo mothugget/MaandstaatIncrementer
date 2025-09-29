@@ -12,9 +12,6 @@ import java.util.Date;
 
 public class MaandStaatManipulator {
 
-    public MaandStaatManipulator(String filePath, float hours, String description, String customer) {
-        updateFile(filePath, hours, description, customer);
-    }
 
     private Row getTodaysRow(Sheet sheet) {
         LocalDate today = LocalDate.now();
@@ -35,7 +32,7 @@ public class MaandStaatManipulator {
         return todayRow;
     }
 
-    private void updateFile(String filePath, Float hours, String description, String customer) {
+    public void updateFile(String filePath, Float hours, String description, String customer) {
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
 

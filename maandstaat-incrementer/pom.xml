@@ -44,7 +44,7 @@
                             <transformers>
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.github.mothugget.Main</mainClass>
+                                    <mainClass>com.squadra.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -59,14 +59,14 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.github.mothugget.Main</mainClass>
+                            <mainClass>com.squadra.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <groupId>com.github.mothugget</groupId>
+    <groupId>com.squadra</groupId>
     <artifactId>maandstaat-incrementer</artifactId>
     <version>1.0-SNAPSHOT</version>
 
