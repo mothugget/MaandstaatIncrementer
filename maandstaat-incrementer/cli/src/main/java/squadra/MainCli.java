@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class Main {
+public class MainCli {
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.load();
         String filePath = dotenv.get("FILE_PATH");
