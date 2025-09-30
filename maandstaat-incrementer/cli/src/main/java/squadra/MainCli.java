@@ -1,7 +1,6 @@
 package squadra;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -21,7 +20,7 @@ public class MainCli {
         MaandStaatManipulator manipulator = new MaandStaatManipulator();
         String[] customers = new String[numberOfCustomers];
         try {
-            customers = manipulator.getCustomers(filePath, numberOfCustomers);
+            customers = MaandStaatManipulator.getCustomers(filePath, numberOfCustomers);
         } catch (IOException e) {
             System.out.println("Failed to find Maandstaat sheet\n" + e);
         }
