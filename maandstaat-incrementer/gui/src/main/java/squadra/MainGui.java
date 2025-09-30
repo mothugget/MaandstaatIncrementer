@@ -46,6 +46,7 @@ public class MainGui {
         frame.add(descriptionLabel, gbc);
 
         JTextField descriptionField = new JTextField(21);
+        descriptionField.setText("Enter description here");
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
