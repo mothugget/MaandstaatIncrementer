@@ -9,9 +9,19 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.io.FileWriter;
+import java.time.LocalDateTime;
 
 public class MaandStaatManipulator {
 
+    public void logHoursToTextFile(String input){
+        try (FileWriter writer = new FileWriter("log.txt", true)) {
+            writer.write(LocalDateTime.now() + " - " + input + System.lineSeparator());
+            System.out.println("Commit added to log file");
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
 
     private Row getTodaysRow(Sheet sheet) {
         LocalDate today = LocalDate.now();

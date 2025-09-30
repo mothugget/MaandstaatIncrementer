@@ -1,8 +1,5 @@
 package squadra;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class MainCli {
@@ -26,7 +23,7 @@ public class MainCli {
             System.out.println("Need the following args <customer> <description> (<hours>  - default is 1)");
             return;
         }
-        if (isNumeric(args[0]) || isNumeric(args[1])) {
+        if (Utilities.isNumeric(args[0]) || Utilities.isNumeric(args[1])) {
             System.out.println("First two arguments must be strings (customer, description).");
             return;
         }
@@ -51,15 +48,8 @@ public class MainCli {
 
         MaandStaatManipulator manipulator = new MaandStaatManipulator();
         manipulator.updateFile(filePath, hours, description, customer);
-        try (FileWriter writer = new FileWriter("log.txt", true)) {
-            writer.write(LocalDateTime.now() + " - " + input + System.lineSeparator());
-            System.out.println("Commit added to log file");
-        } catch (IOException e) {
-            System.err.println("Error writing to log file: " + e.getMessage());
-        }
+        manipulator.logHoursToTextFile(input);
     }
 
-    public static boolean isNumeric(String str) {
-        return str != null && str.matches("-?\\d+(\\.\\d+)?");
-    }
+
 }
