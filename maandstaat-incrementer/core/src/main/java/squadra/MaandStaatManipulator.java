@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 public class MaandStaatManipulator {
 
-    public void logHoursToTextFile(String input){
+    public void logHoursToTextFile(String input) {
         try (FileWriter writer = new FileWriter("log.txt", true)) {
             writer.write(LocalDateTime.now() + " - " + input + System.lineSeparator());
             System.out.println("Commit added to log file");
@@ -40,6 +40,19 @@ public class MaandStaatManipulator {
             }
         }
         return todayRow;
+    }
+
+    public static String[] getCustomers(String filePath, int sheetCount) throws IOException {
+        try (FileInputStream fis = new FileInputStream(filePath);
+                Workbook workbook = new XSSFWorkbook(fis)) {
+
+            String[] sheetNames = new String[sheetCount];
+            for (int i = 0; i < sheetCount; i++) {
+                sheetNames[i] = workbook.getSheetName(i);
+            }
+
+            return sheetNames;
+        }
     }
 
     public void updateFile(String filePath, Float hours, String description, String customer) {
@@ -69,8 +82,8 @@ public class MaandStaatManipulator {
             }
             String oldDescriptionValue = descriptionCell.getStringCellValue();
             float oldHoursValue = (float) hoursCell.getNumericCellValue();
-            String delimiter=(oldDescriptionValue=="")? "":"/";
-            
+            String delimiter = (oldDescriptionValue == "") ? "" : "/";
+
             String newDescriptionValue = oldDescriptionValue + delimiter + description;
             float newHoursValue = oldHoursValue + hours;
             System.out.println("New description - " + newDescriptionValue);
