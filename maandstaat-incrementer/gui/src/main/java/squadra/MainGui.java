@@ -11,8 +11,8 @@ public class MainGui {
     public static void main(String[] args) {
         String filePath;
         ConfigManager configs = new ConfigManager(".config.properties");
-        configs.set("filePath","/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm",true);
-        filePath = configs.get("filePath","");
+        configs.set("filePath", "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm", true);
+        filePath = configs.get("filePath", "");
         int numberOfCustomers = 2;
         String[] customers = new String[numberOfCustomers];
         try {
@@ -23,6 +23,24 @@ public class MainGui {
         }
         // Create the main frame
         JFrame frame = new JFrame("Maandstaat Incrementer");
+        StartupDialog dialog = new StartupDialog(frame);
+        dialog.setVisible(true); // <- This actually shows the dialog
+
+        // Only proceed if the user clicked OK
+        if (dialog.isConfirmed()) {
+            String path = dialog.getFilePath();
+            int customers2 = dialog.getNumberOfCustomers();
+            System.out.println("Path: " + path);
+            System.out.println("Customers: " + customers);
+
+            // Now you can initialize your main GUI
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(400, 300);
+            frame.setVisible(true);
+        } else {
+            System.out.println("Startup canceled.");
+            System.exit(0);
+        }
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(411, 200);
         frame.setLayout(new GridBagLayout());
