@@ -5,10 +5,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.NumberFormat;
 
 public class MainGui {
     public static void main(String[] args) {
-        String filePath = "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm";
+        String filePath;
+        ConfigManager configs = new ConfigManager(".config.properties");
+        configs.set("filePath","/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm",true);
+        filePath = configs.get("filePath","");
         int numberOfCustomers = 2;
         String[] customers = new String[numberOfCustomers];
         try {
@@ -62,7 +66,10 @@ public class MainGui {
         gbc.weightx = 0;
         frame.add(hoursLabel, gbc);
 
-        JTextField hoursField = new JTextField(5);
+        NumberFormat floatFormat = NumberFormat.getNumberInstance();
+        JFormattedTextField hoursField = new JFormattedTextField(floatFormat);
+        hoursField.setColumns(5);
+        hoursField.setText("0.5");
         hoursField.setMinimumSize(hoursField.getPreferredSize());
         hoursField.setMaximumSize(hoursField.getPreferredSize());
         gbc.gridx = 1;
