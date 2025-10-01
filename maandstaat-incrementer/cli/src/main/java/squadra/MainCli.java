@@ -53,7 +53,7 @@ public class MainCli {
             try {
                 hours = Float.parseFloat(args[2]);
             } catch (NumberFormatException e) {
-                System.out.println("Error: hours must be a number");
+                System.err.println("Error: hours must be a number");
                 return;
             }
         }

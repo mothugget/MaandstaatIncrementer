@@ -1,18 +1,23 @@
 package squadra;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.NumberFormat;
 
+
 public class MainGui {
+    private static String filePath;
+    private static String selectedCustomer;
+    private static int numberOfCustomers;
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public static void main(String[] args) {
         ConfigManager configs = new ConfigManager(".config.properties");
-        String filePath = configs.get("FILE_PATH", "");
-        int numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
+        filePath = configs.get("FILE_PATH", "");
+        numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
         String[] customers = new String[numberOfCustomers];
 
         // Create the main frame
@@ -60,9 +65,9 @@ public class MainGui {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         frame.add(customerDropdown, gbc);
-
+        selectedCustomer = (String) customerDropdown.getSelectedItem();
         customerDropdown.addActionListener(e -> {
-            String selectedCustomer = (String) customerDropdown.getSelectedItem();
+            selectedCustomer = (String) customerDropdown.getSelectedItem();
             System.out.println("Selected customer: " + selectedCustomer);
         });
 
@@ -109,17 +114,26 @@ public class MainGui {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         frame.add(publishButton, gbc);
-
+        MaandStaatManipulator manipulator = new MaandStaatManipulator();
         // Action listener for button
         publishButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent event) {
+                try{
                 String description = descriptionField.getText();
-                String hours = hoursField.getText();
+                float hours = Float.parseFloat(hoursField.getText());
+                manipulator.updateFile(filePath,hours,description,selectedCustomer);
                 JOptionPane.showMessageDialog(frame,
                         "Description: " + description + "\nHours: " + hours,
                         "Published Task",
                         JOptionPane.INFORMATION_MESSAGE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(frame,
+                    "Some error:\n"+e.toString(),
+                    e.getClass().getName(),
+                    JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
