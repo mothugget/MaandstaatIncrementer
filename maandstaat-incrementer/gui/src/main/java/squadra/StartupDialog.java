@@ -9,7 +9,7 @@ public class StartupDialog extends JDialog {
     private JFormattedTextField customerField;
     private boolean confirmed = false;
 
-    public StartupDialog(Frame parent) {
+    public StartupDialog(Frame parent,String filePath, int numberOfCustomers) {
         super(parent, "Startup Configuration", true); // modal dialog
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -20,6 +20,7 @@ public class StartupDialog extends JDialog {
         gbc.gridx = 0; gbc.gridy = 0;
         add(new JLabel("File Path:"), gbc);
         pathField = new JTextField(20);
+        pathField.setText(filePath);
         gbc.gridx = 1;
         add(pathField, gbc);
 
@@ -28,7 +29,7 @@ public class StartupDialog extends JDialog {
         add(new JLabel("Number of Customers:"), gbc);
         customerField = new JFormattedTextField(java.text.NumberFormat.getIntegerInstance());
         customerField.setColumns(5);
-        customerField.setValue(1); // default
+        customerField.setValue(numberOfCustomers); // default
         gbc.gridx = 1;
         add(customerField, gbc);
 
@@ -73,7 +74,7 @@ public class StartupDialog extends JDialog {
     // Usage example
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            StartupDialog dialog = new StartupDialog(null);
+            StartupDialog dialog = new StartupDialog(null,"",2);
             dialog.setVisible(true);
 
             if (dialog.isConfirmed()) {

@@ -8,31 +8,31 @@ import java.io.IOException;
 import java.text.NumberFormat;
 
 public class MainGui {
+    // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public static void main(String[] args) {
-        String filePath;
         ConfigManager configs = new ConfigManager(".config.properties");
-        configs.set("filePath", "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm", true);
-        filePath = configs.get("filePath", "");
-        int numberOfCustomers = 2;
+        String filePath = configs.get("FILE_PATH", "");
+        int numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
         String[] customers = new String[numberOfCustomers];
-        try {
-            customers = MaandStaatManipulator.getCustomers(filePath, numberOfCustomers);
-        } catch (IOException e) {
-            System.out.println("Failed to find Maandstaat sheet\n" + e);
-            return;
-        }
+
         // Create the main frame
         JFrame frame = new JFrame("Maandstaat Incrementer");
-        StartupDialog dialog = new StartupDialog(frame);
+        StartupDialog dialog = new StartupDialog(frame, filePath, numberOfCustomers);
         dialog.setVisible(true); // <- This actually shows the dialog
 
         // Only proceed if the user clicked OK
         if (dialog.isConfirmed()) {
-            String path = dialog.getFilePath();
-            int customers2 = dialog.getNumberOfCustomers();
-            System.out.println("Path: " + path);
-            System.out.println("Customers: " + customers);
+            filePath = dialog.getFilePath();
+            numberOfCustomers = dialog.getNumberOfCustomers();
+            configs.set("FILE_PATH", filePath, true);
+            configs.set("NUMBER_OF_CUSTOMERS", Integer.toString(numberOfCustomers), true);
 
+            try {
+                customers = MaandStaatManipulator.getCustomers(filePath, numberOfCustomers);
+            } catch (IOException e) {
+                System.out.println("Failed to find Maandstaat sheet\n" + e);
+                return;
+            }
             // Now you can initialize your main GUI
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 300);
@@ -60,6 +60,12 @@ public class MainGui {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         frame.add(customerDropdown, gbc);
+
+        customerDropdown.addActionListener(e -> {
+            String selectedCustomer = (String) customerDropdown.getSelectedItem();
+            System.out.println("Selected customer: " + selectedCustomer);
+        });
+
         // Description label and text field
         JLabel descriptionLabel = new JLabel("Description:");
         gbc.gridx = 0;
