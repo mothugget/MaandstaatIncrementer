@@ -22,6 +22,7 @@ public class SuggestionsDialog extends JDialog {
         DefaultTableModel model = new DefaultTableModel(data, columns);
         setLayout(new GridBagLayout());
         add(new JTable(model),gbc);
+        pack();
         setLocationRelativeTo(frame);
     }
 }
