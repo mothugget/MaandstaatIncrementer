@@ -1,8 +1,16 @@
 package squadra;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class StartupDialog extends JDialog {
     private JTextField pathField;
@@ -72,26 +80,4 @@ public class StartupDialog extends JDialog {
     }
 
     // Usage example
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            StartupDialog dialog = new StartupDialog(null,"",2);
-            dialog.setVisible(true);
-
-            if (dialog.isConfirmed()) {
-                String path = dialog.getFilePath();
-                int customers = dialog.getNumberOfCustomers();
-                System.out.println("Path: " + path);
-                System.out.println("Customers: " + customers);
-
-                // Now you can start your main GUI
-                JFrame mainFrame = new JFrame("Main GUI");
-                mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                mainFrame.setSize(400, 300);
-                mainFrame.setVisible(true);
-            } else {
-                System.out.println("Startup canceled, exiting app.");
-                System.exit(0);
-            }
-        });
-    }
 }

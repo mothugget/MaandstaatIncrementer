@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 
+
 public class MainGui {
     private static String filePath;
     private static String selectedCustomer;
@@ -46,6 +47,10 @@ public class MainGui {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(411, 200);
         frame.setLayout(new GridBagLayout());
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
+        suggestionDialog.setSize(411, 200);
+        suggestionDialog.setVisible(true);
+
 
         MainPanel mainPanel= new MainPanel(frame, selectedCustomer, customers, filePath);
   
