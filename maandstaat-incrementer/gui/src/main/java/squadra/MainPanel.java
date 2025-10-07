@@ -31,7 +31,7 @@ public class MainPanel {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         frame.add(customerDropdown, gbc);
-        selectedCustomer = (String) customerDropdown.getSelectedItem();
+        selection = (String) customerDropdown.getSelectedItem();
         customerDropdown.addActionListener(e -> {
             selection = (String) customerDropdown.getSelectedItem();
             System.out.println("Selected customer: " + selection);
