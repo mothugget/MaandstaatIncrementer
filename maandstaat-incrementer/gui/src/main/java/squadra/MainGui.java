@@ -47,6 +47,7 @@ public class MainGui {
         frame.setSize(411, 200);
         frame.setLayout(new GridBagLayout());
 
+        MainPanel mainPanel= new MainPanel(frame, selectedCustomer, customers, filePath);
   
 
         // Show the frame

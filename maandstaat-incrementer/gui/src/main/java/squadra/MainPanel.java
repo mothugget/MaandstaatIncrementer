@@ -4,12 +4,8 @@ import java.text.NumberFormat;
 import javax.swing.*;
 
 import java.awt.*;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import java.awt.event.*;
+
 
 import java.io.IOException;
 
@@ -18,7 +14,7 @@ import javax.swing.JFrame;
 public class MainPanel {
     private String selection;
 
-    public MainPanel(JFrame frame, String selectedCustomer, String[] customers) {
+    public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath) {
         this.selection=selectedCustomer;
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // spacing
@@ -92,7 +88,7 @@ public class MainPanel {
                 try {
                     String description = descriptionField.getText();
                     float hours = Float.parseFloat(hoursField.getText());
-                    manipulator.updateFile(filePath, hours, description, selectedCustomer);
+                    manipulator.updateFile(filePath, hours, description, selection);
                     JOptionPane.showMessageDialog(frame,
                             "Description: " + description + "\nHours: " + hours,
                             "Published Task",
