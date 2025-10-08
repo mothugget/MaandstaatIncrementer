@@ -59,7 +59,7 @@ public class MaandStaatManipulator {
         }
     }
 
-    public void updateFile(String filePath, Float hours, String description, String customer, LocalDate date) {
+    public void updateFile(String filePath, float hours, String description, String customer, LocalDate date) {
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -90,6 +90,7 @@ public class MaandStaatManipulator {
 
             String newDescriptionValue = oldDescriptionValue + delimiter + description;
             float newHoursValue = oldHoursValue + hours;
+            System.out.println("Date - "+date.toString());
             System.out.println("New description - " + newDescriptionValue);
             System.out.println("New hours - " + newHoursValue);
             descriptionCell.setCellValue(newDescriptionValue);

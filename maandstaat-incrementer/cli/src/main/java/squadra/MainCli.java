@@ -1,8 +1,9 @@
 package squadra;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.time.LocalDate;
+import java.util.Arrays;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class MainCli {
@@ -12,7 +13,7 @@ public class MainCli {
         String environmentIncrementer = dotenv.get("DEFAULT_HOUR_INCREMENT");
         int numberOfCustomers = 2;
         int daysInThePast=0;
-        LocalDate today=LocalDate.now()
+        LocalDate today=LocalDate.now();
         try {
             numberOfCustomers = Integer.parseInt(dotenv.get("NUMBER_OF_CUSTOMERS"));
         } catch (NumberFormatException e) {
@@ -54,7 +55,7 @@ public class MainCli {
         String customer = args[0];
         String description = args[1];
 
-        if (args.length > 2) {
+        if (args.length > 2 && !args[2].equals("-ditp")) {
             try {
                 hours = Float.parseFloat(args[2]);
             } catch (NumberFormatException e) {
@@ -71,7 +72,7 @@ public class MainCli {
                     System.err.println("Error: \"days in the past\" must be a number");
                     return;
                 }
-            })
+            }
         }
 
         System.out.println("Customer: " + customer + " | Description: " + description + " | Hours: " + hours);
@@ -80,8 +81,8 @@ public class MainCli {
         String input = String.join(" ", args);
 
         // Append to log.txt
-
-        manipulator.updateFile(filePath, hours, description, customer);
+        LocalDate date =today.plusDays(-daysInThePast);
+        manipulator.updateFile(filePath, hours, description, customer,date);
         manipulator.logHoursToTextFile(input);
     }
 

@@ -19,7 +19,7 @@ public class MainPanel {
     private String selection;
 
     public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath) {
-        this.selection=selectedCustomer;
+        this.selection = selectedCustomer;
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // spacing
 
@@ -92,8 +92,8 @@ public class MainPanel {
                 try {
                     String description = descriptionField.getText();
                     float hours = Float.parseFloat(hoursField.getText());
-                    LocalDate date =LocalDate.now();
-                    manipulator.updateFile(filePath, hours, description, selection,date);
+                    LocalDate date = LocalDate.now();
+                    manipulator.updateFile(filePath, hours, description, selection, date);
                     JOptionPane.showMessageDialog(frame,
                             "Description: " + description + "\nHours: " + hours,
                             "Published Task",
