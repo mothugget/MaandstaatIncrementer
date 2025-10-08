@@ -2,15 +2,16 @@ package squadra;
 
 import java.awt.GridBagLayout;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
-
-
 
 public class MainGui {
     private static String filePath;
     private static String selectedCustomer;
     private static int numberOfCustomers;
+    private static AtomicBoolean showSuggestionDialog = new AtomicBoolean(false);
+
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public static void main(String[] args) {
         ConfigManager configs = new ConfigManager(".config.properties");
@@ -48,12 +49,12 @@ public class MainGui {
         frame.setSize(411, 200);
         frame.setLayout(new GridBagLayout());
         SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
-        suggestionDialog.setSize(411, 200);
-        suggestionDialog.setVisible(true);
+        if (showSuggestionDialog.get()) {
+            suggestionDialog.setSize(411, 200);
+            suggestionDialog.setVisible(true);
+        }
 
-
-        MainPanel mainPanel= new MainPanel(frame, selectedCustomer, customers, filePath);
-  
+        MainPanel mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, showSuggestionDialog);
 
         // Show the frame
         frame.setLocationRelativeTo(null); // center on screen

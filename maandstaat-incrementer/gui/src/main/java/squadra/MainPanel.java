@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,7 +19,7 @@ import javax.swing.JTextField;
 public class MainPanel {
     private String selection;
 
-    public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath) {
+    public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath, AtomicBoolean display) {
         this.selection = selectedCustomer;
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // spacing
@@ -77,6 +78,28 @@ public class MainPanel {
         gbc.weightx = 0;
         frame.add(hoursField, gbc);
 
+        JButton suggestionsButton = new JButton("Suggestions");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weightx = 0;
+        frame.add(suggestionsButton, gbc);
+        // Action listener for button
+        suggestionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                try {
+                    System.out.println("Suggestions baby");
+                    display.set(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(frame,
+                            "Some error:\n" + e.toString(),
+                            e.getClass().getName(),
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         // Publish button
         JButton publishButton = new JButton("Publish");
         gbc.gridx = 2;
