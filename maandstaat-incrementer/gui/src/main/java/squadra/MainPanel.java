@@ -1,15 +1,19 @@
 package squadra;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.NumberFormat;
-import javax.swing.*;
+import java.time.LocalDate;
 
-import java.awt.*;
-import java.awt.event.*;
-
-
-import java.io.IOException;
-
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class MainPanel {
     private String selection;
@@ -88,7 +92,8 @@ public class MainPanel {
                 try {
                     String description = descriptionField.getText();
                     float hours = Float.parseFloat(hoursField.getText());
-                    manipulator.updateFile(filePath, hours, description, selection);
+                    LocalDate date =LocalDate.now();
+                    manipulator.updateFile(filePath, hours, description, selection,date);
                     JOptionPane.showMessageDialog(frame,
                             "Description: " + description + "\nHours: " + hours,
                             "Published Task",

@@ -2,7 +2,7 @@ package squadra;
 
 import java.io.IOException;
 import java.util.Arrays;
-
+import java.time.LocalDate;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class MainCli {
@@ -11,11 +11,14 @@ public class MainCli {
         String filePath = dotenv.get("FILE_PATH");
         String environmentIncrementer = dotenv.get("DEFAULT_HOUR_INCREMENT");
         int numberOfCustomers = 2;
+        int daysInThePast=0;
+        LocalDate today=LocalDate.now()
         try {
             numberOfCustomers = Integer.parseInt(dotenv.get("NUMBER_OF_CUSTOMERS"));
         } catch (NumberFormatException e) {
             System.out
-                    .println("Number of customers in .env cannot be cast to a number. Using " + numberOfCustomers + " as default.");
+                    .println("Number of customers in .env cannot be cast to a number. Using " + numberOfCustomers
+                            + " as default.");
         }
         MaandStaatManipulator manipulator = new MaandStaatManipulator();
         String[] customers = new String[numberOfCustomers];
@@ -35,11 +38,13 @@ public class MainCli {
 
         // If no arguments provided
         if (args.length == 0) {
-            System.out.println("Need the following args <customer> <description> (<hours> - default is " + hours + ")\nPossible customer values: "+Arrays.toString(customers));
+            System.out.println("Need the following args <customer> <description> (<hours> - default is " + hours
+                    + ")\nPossible customer values: " + Arrays.toString(customers));
             return;
         }
         if (args.length < 2) {
-            System.out.println("Need the following args <customer> <description> (<hours>  - default is " + hours + ")\nPossible customer values: "+Arrays.toString(customers));
+            System.out.println("Need the following args <customer> <description> (<hours>  - default is " + hours
+                    + ")\nPossible customer values: " + Arrays.toString(customers));
             return;
         }
         if (Utilities.isNumeric(args[0]) || Utilities.isNumeric(args[1])) {
@@ -56,6 +61,17 @@ public class MainCli {
                 System.err.println("Error: hours must be a number");
                 return;
             }
+
+        }
+        for (int i = 0; i < args.length; i++) {
+            if(args[i].equals("-ditp")){
+                try {
+                    daysInThePast= Integer.parseInt(args[i+1]);
+                } catch (NumberFormatException e) {
+                    System.err.println("Error: \"days in the past\" must be a number");
+                    return;
+                }
+            })
         }
 
         System.out.println("Customer: " + customer + " | Description: " + description + " | Hours: " + hours);

@@ -1,16 +1,21 @@
 package squadra;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.io.FileWriter;
-import java.time.LocalDateTime;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MaandStaatManipulator {
 
@@ -23,8 +28,7 @@ public class MaandStaatManipulator {
         }
     }
 
-    private Row getTodaysRow(Sheet sheet) {
-        LocalDate today = LocalDate.now();
+    private Row getDateRow(Sheet sheet,LocalDate date) {
         Row todayRow = null;
         for (Row row : sheet) {
             Cell cell = row.getCell(1);
@@ -33,7 +37,7 @@ public class MaandStaatManipulator {
                 LocalDate localDate = cellDate.toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
-                if (localDate.equals(today)) {
+                if (localDate.equals(date)) {
                     todayRow = row;
                     break;
                 }
@@ -55,7 +59,7 @@ public class MaandStaatManipulator {
         }
     }
 
-    public void updateFile(String filePath, Float hours, String description, String customer) {
+    public void updateFile(String filePath, Float hours, String description, String customer, LocalDate date) {
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -66,7 +70,7 @@ public class MaandStaatManipulator {
                 System.out.println("Customer not found! Check sheet name");
                 return;
             }
-            Row row = getTodaysRow(sheet);
+            Row row = getDateRow(sheet,date);
 
             if (row == null) {
                 System.out.println("Cant find todays date");
