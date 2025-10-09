@@ -1,6 +1,7 @@
 package squadra;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -64,7 +65,7 @@ public class MainGui implements MainPanelListener {
         }
 
 
-        MainPanel mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this);
+        MainPanel mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
         // Show the frame
         frame.setSize(411, 200);
         

@@ -21,28 +21,50 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 public class MainPanel extends JPanel {
     private String selection;
+    private MaskFormatter dateMask;
     private final MainPanelListener listener;
     private final JFrame frame;
+    private LocalDate date;
 
     public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath,
-            MainPanelListener listener) {
+            MainPanelListener listener, LocalDate date) {
         this.selection = selectedCustomer;
         this.listener = listener;
         this.frame = frame;
+        this.date=date;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.insets = new Insets(5, 5, 5, 5); // spacing
 
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        JLabel dateLabel = new JLabel("Date (YYYY-MM-DD):");
+        this.add(dateLabel,gbc);
+        try {
+            dateMask = new MaskFormatter("####-##-##");
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        dateMask.setPlaceholderCharacter('_');
+        JFormattedTextField dateField = new JFormattedTextField(dateMask);
+        dateField.setColumns(10);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        dateField.setText(date.toString());
+        this.add(dateField,gbc);
         // Create a JComboBox fed by the array
         JComboBox<String> customerDropdown = new JComboBox<>(customers);
 
         // Add to your frame (or panel)
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(new JLabel("Customer:"), gbc);
 
@@ -58,7 +80,7 @@ public class MainPanel extends JPanel {
         // Description label and text field
         JLabel descriptionLabel = new JLabel("Description:");
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(descriptionLabel, gbc);
 
@@ -67,7 +89,6 @@ public class MainPanel extends JPanel {
         descriptionField.setText("Enter description here");
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         
 
@@ -110,7 +131,7 @@ public class MainPanel extends JPanel {
         // Hours label and text field
         JLabel hoursLabel = new JLabel("Hours:");
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
@@ -130,7 +151,7 @@ public class MainPanel extends JPanel {
 
         JButton suggestionsButton = new JButton("Suggestions");
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(suggestionsButton, gbc);
@@ -154,7 +175,7 @@ public class MainPanel extends JPanel {
         // Publish button
         JButton publishButton = new JButton("Publish");
         gbc.gridx = 2;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(publishButton, gbc);
@@ -166,7 +187,6 @@ public class MainPanel extends JPanel {
                 try {
                     String description = descriptionField.getText();
                     float hours = Float.parseFloat(hoursField.getText());
-                    LocalDate date = LocalDate.now();
                     manipulator.updateFile(filePath, hours, description, selection, date);
                     JOptionPane.showMessageDialog(frame,
                             "Description: " + description + "\nHours: " + hours,
