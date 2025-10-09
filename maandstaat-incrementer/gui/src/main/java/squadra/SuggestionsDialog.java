@@ -23,6 +23,5 @@ public class SuggestionsDialog extends JDialog {
         setLayout(new GridBagLayout());
         add(new JTable(model),gbc);
         pack();
-        setLocationRelativeTo(frame);
     }
 }

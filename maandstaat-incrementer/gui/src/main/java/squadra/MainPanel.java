@@ -1,12 +1,12 @@
 package squadra;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,14 +14,22 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class MainPanel {
+public class MainPanel extends JPanel {
     private String selection;
+    private final MainPanelListener listener;
+    private final JFrame frame;
 
-    public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath, AtomicBoolean display) {
+    public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath,
+            MainPanelListener listener) {
         this.selection = selectedCustomer;
+        this.listener = listener;
+        this.frame = frame;
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.insets = new Insets(5, 5, 5, 5); // spacing
 
         // Create a JComboBox fed by the array
@@ -31,11 +39,11 @@ public class MainPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
-        frame.add(new JLabel("Customer:"), gbc);
+        this.add(new JLabel("Customer:"), gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        frame.add(customerDropdown, gbc);
+        this.add(customerDropdown, gbc);
         selection = (String) customerDropdown.getSelectedItem();
         customerDropdown.addActionListener(e -> {
             selection = (String) customerDropdown.getSelectedItem();
@@ -47,7 +55,7 @@ public class MainPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.EAST;
-        frame.add(descriptionLabel, gbc);
+        this.add(descriptionLabel, gbc);
 
         JTextField descriptionField = new JTextField(21);
         descriptionField.setText("Enter description here");
@@ -55,7 +63,7 @@ public class MainPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        frame.add(descriptionField, gbc);
+        this.add(descriptionField, gbc);
 
         // Hours label and text field
         JLabel hoursLabel = new JLabel("Hours:");
@@ -64,7 +72,7 @@ public class MainPanel {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
-        frame.add(hoursLabel, gbc);
+        this.add(hoursLabel, gbc);
 
         NumberFormat floatFormat = NumberFormat.getNumberInstance();
         JFormattedTextField hoursField = new JFormattedTextField(floatFormat);
@@ -76,21 +84,22 @@ public class MainPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
-        frame.add(hoursField, gbc);
+        this.add(hoursField, gbc);
 
         JButton suggestionsButton = new JButton("Suggestions");
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
-        frame.add(suggestionsButton, gbc);
+        this.add(suggestionsButton, gbc);
         // Action listener for button
         suggestionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 try {
-                    System.out.println("Suggestions baby");
-                    display.set(true);
+                    if (listener != null) {
+                        listener.onSuggestionsRequested();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(frame,
@@ -106,7 +115,7 @@ public class MainPanel {
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
-        frame.add(publishButton, gbc);
+        this.add(publishButton, gbc);
         MaandStaatManipulator manipulator = new MaandStaatManipulator();
         // Action listener for button
         publishButton.addActionListener(new ActionListener() {

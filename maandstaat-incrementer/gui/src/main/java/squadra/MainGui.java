@@ -1,31 +1,50 @@
 package squadra;
 
-import java.awt.GridBagLayout;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
-public class MainGui {
+public class MainGui implements MainPanelListener {
     private static String filePath;
     private static String selectedCustomer;
     private static int numberOfCustomers;
-    private static AtomicBoolean showSuggestionDialog = new AtomicBoolean(false);
+    private final JFrame frame;
+
+    @Override
+    public void onSuggestionsRequested() {
+        System.out.println("MainGui received suggestion event");
+
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
+        suggestionDialog.setSize(411, 200);
+        suggestionDialog.setLocationRelativeTo(null);
+        suggestionDialog.setVisible(true);
+    }
+
+    public void onPublish() {
+        System.out.println("MainGui received suggestion event");
+
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
+        suggestionDialog.setSize(411, 200);
+        suggestionDialog.setVisible(true);
+    }
 
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
-    public static void main(String[] args) {
+    public MainGui() {
         ConfigManager configs = new ConfigManager(".config.properties");
         filePath = configs.get("FILE_PATH", "");
         numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
         String[] customers = new String[numberOfCustomers];
 
         // Create the main frame
-        JFrame frame = new JFrame("Maandstaat Incrementer");
+        frame = new JFrame("Maandstaat Incrementer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         StartupDialog dialog = new StartupDialog(frame, filePath, numberOfCustomers);
         dialog.setVisible(true); // <- This actually shows the dialog
 
         // Only proceed if the user clicked OK
         if (dialog.isConfirmed()) {
+            dialog.dispose();
             filePath = dialog.getFilePath();
             numberOfCustomers = dialog.getNumberOfCustomers();
             configs.set("FILE_PATH", filePath, true);
@@ -38,27 +57,25 @@ public class MainGui {
                 return;
             }
             // Now you can initialize your main GUI
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(400, 300);
-            frame.setVisible(true);
+
         } else {
             System.out.println("Startup canceled.");
             System.exit(0);
         }
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(411, 200);
-        frame.setLayout(new GridBagLayout());
-        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
-        if (showSuggestionDialog.get()) {
-            suggestionDialog.setSize(411, 200);
-            suggestionDialog.setVisible(true);
-        }
 
-        MainPanel mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, showSuggestionDialog);
 
+        MainPanel mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this);
         // Show the frame
-        frame.setLocationRelativeTo(null); // center on screen
+        frame.setSize(411, 200);
+        
+        frame.setContentPane(mainPanel);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(MainGui::new);
     }
 
 }
