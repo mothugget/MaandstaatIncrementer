@@ -5,16 +5,21 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 public class MainPanel extends JPanel {
@@ -57,14 +62,51 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.EAST;
         this.add(descriptionLabel, gbc);
 
+        
         JTextField descriptionField = new JTextField(21);
         descriptionField.setText("Enter description here");
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        this.add(descriptionField, gbc);
+        
 
+        java.util.List<String> suggestions = Arrays.asList(
+            "Stand Up","Deep Dive","Refinement","Planning","Planning poker"
+        );
+        JPopupMenu suggestionMenu = new JPopupMenu();
+        descriptionField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String text = descriptionField.getText().trim().toLowerCase();
+                suggestionMenu.removeAll();
+
+                if (text.isEmpty()) {
+                    suggestionMenu.setVisible(false);
+                    return;
+                }
+
+                // Filter matching suggestions
+                suggestions.stream()
+                        .filter(s -> s.toLowerCase().startsWith(text))
+                        .forEach(s -> {
+                            JMenuItem item = new JMenuItem(s);
+                            item.addActionListener(ev -> {
+                                descriptionField.setText(s);
+                                suggestionMenu.setVisible(false);
+                            });
+                            suggestionMenu.add(item);
+                        });
+
+                if (suggestionMenu.getComponentCount() > 0) {
+                    suggestionMenu.show(descriptionField, 0, descriptionField.getHeight());
+                } else {
+                    suggestionMenu.setVisible(false);
+                }
+            }
+        });
+
+        this.add(descriptionField, gbc);
         // Hours label and text field
         JLabel hoursLabel = new JLabel("Hours:");
         gbc.gridx = 0;
