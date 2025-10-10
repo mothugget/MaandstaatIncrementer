@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
+import java.time.format.DateTimeFormatter;
 
 public class MainPanel extends JPanel {
     private String selection;
@@ -62,6 +63,9 @@ public class MainPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         dateField.setText(date.toString());
         this.add(dateField, gbc);
+        
+        
+
         // Create a JComboBox fed by the array
         JComboBox<String> customerDropdown = new JComboBox<>(customers);
 
@@ -211,6 +215,7 @@ public class MainPanel extends JPanel {
         return selection;
     }
     public LocalDate getDate(){
-        return date;
+        String dateString=dateField.getText();
+        return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }
