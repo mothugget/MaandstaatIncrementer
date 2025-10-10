@@ -59,7 +59,7 @@ public class MaandStaatManipulator {
         }
     }
 
-    public void updateFile(String filePath, float hours, String description, String customer, LocalDate date) {
+    public void updateFile(String filePath, float hours, String description, String customer, LocalDate date) throws Exception{
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -102,8 +102,8 @@ public class MaandStaatManipulator {
 
             System.out.println("Maanstaat updated successfully!");
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw e;
             
         }
     }

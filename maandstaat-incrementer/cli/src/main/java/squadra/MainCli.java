@@ -12,8 +12,8 @@ public class MainCli {
         String filePath = dotenv.get("FILE_PATH");
         String environmentIncrementer = dotenv.get("DEFAULT_HOUR_INCREMENT");
         int numberOfCustomers = 2;
-        int daysInThePast=0;
-        LocalDate today=LocalDate.now();
+        int daysInThePast = 0;
+        LocalDate today = LocalDate.now();
         try {
             numberOfCustomers = Integer.parseInt(dotenv.get("NUMBER_OF_CUSTOMERS"));
         } catch (NumberFormatException e) {
@@ -65,9 +65,9 @@ public class MainCli {
 
         }
         for (int i = 0; i < args.length; i++) {
-            if(args[i].equals("-ditp")){
+            if (args[i].equals("-ditp")) {
                 try {
-                    daysInThePast= Integer.parseInt(args[i+1]);
+                    daysInThePast = Integer.parseInt(args[i + 1]);
                 } catch (NumberFormatException e) {
                     System.err.println("Error: \"days in the past\" must be a number");
                     return;
@@ -81,8 +81,12 @@ public class MainCli {
         String input = String.join(" ", args);
 
         // Append to log.txt
-        LocalDate date =today.plusDays(-daysInThePast);
-        manipulator.updateFile(filePath, hours, description, customer,date);
+        LocalDate date = today.plusDays(-daysInThePast);
+        try {
+            manipulator.updateFile(filePath, hours, description, customer, date);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
         manipulator.logHoursToTextFile(input);
     }
 
