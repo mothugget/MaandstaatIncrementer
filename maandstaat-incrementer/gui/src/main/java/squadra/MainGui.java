@@ -2,6 +2,7 @@ package squadra;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -18,12 +19,14 @@ public class MainGui implements MainPanelListener {
     private static float hours;
     private static LocalDate date;
     private static MainPanel mainPanel;
+    private static Map<String, String[]> customerSuggestions;
+
     @Override
     public void onSuggestionsRequested() {
         System.out.println("MainGui received suggestion event");
 
         SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
-        suggestionDialog.setSize(411, 200);
+        suggestionDialog.setSize(300, 500);
         suggestionDialog.setLocationRelativeTo(null);
         suggestionDialog.setVisible(true);
     }
@@ -58,6 +61,7 @@ public class MainGui implements MainPanelListener {
         filePath = configs.get("FILE_PATH", "");
         numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
         String[] customers = new String[numberOfCustomers];
+        
 
         // Create the main frame
         frame = new JFrame("Maandstaat Incrementer");
