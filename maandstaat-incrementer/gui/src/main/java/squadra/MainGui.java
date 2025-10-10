@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class MainGui implements MainPanelListener {
@@ -11,7 +12,7 @@ public class MainGui implements MainPanelListener {
     private static String selectedCustomer;
     private static int numberOfCustomers;
     private final JFrame frame;
-
+    private final MaandStaatManipulator manipulator;
     @Override
     public void onSuggestionsRequested() {
         System.out.println("MainGui received suggestion event");
@@ -22,16 +23,21 @@ public class MainGui implements MainPanelListener {
         suggestionDialog.setVisible(true);
     }
 
+    @Override
     public void onPublish() {
-        System.out.println("MainGui received suggestion event");
-
-        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
-        suggestionDialog.setSize(411, 200);
-        suggestionDialog.setVisible(true);
+                    String description = descriptionField.getText();
+                    float hours = Float.parseFloat(hoursField.getText());
+                    manipulator.updateFile(filePath, hours, description, selection, date);
+                    JOptionPane.showMessageDialog(frame,
+                            "Description: " + description + "\nHours: " + hours,
+                            "Published Task",
+                            JOptionPane.INFORMATION_MESSAGE);
     }
 
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public MainGui() {
+        manipulator= new MaandStaatManipulator();
+
         ConfigManager configs = new ConfigManager(".config.properties");
         filePath = configs.get("FILE_PATH", "");
         numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));

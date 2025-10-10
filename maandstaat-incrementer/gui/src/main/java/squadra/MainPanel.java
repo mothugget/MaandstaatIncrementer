@@ -179,19 +179,14 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(publishButton, gbc);
-        MaandStaatManipulator manipulator = new MaandStaatManipulator();
         // Action listener for button
         publishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 try {
-                    String description = descriptionField.getText();
-                    float hours = Float.parseFloat(hoursField.getText());
-                    manipulator.updateFile(filePath, hours, description, selection, date);
-                    JOptionPane.showMessageDialog(frame,
-                            "Description: " + description + "\nHours: " + hours,
-                            "Published Task",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    if (listener != null) {
+                        listener.onPublish();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(frame,
@@ -199,6 +194,9 @@ public class MainPanel extends JPanel {
                             e.getClass().getName(),
                             JOptionPane.ERROR_MESSAGE);
                 }
+
+
+
             }
         });
     }
