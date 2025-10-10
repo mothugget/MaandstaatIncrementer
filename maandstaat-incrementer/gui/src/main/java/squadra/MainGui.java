@@ -13,6 +13,11 @@ public class MainGui implements MainPanelListener {
     private static int numberOfCustomers;
     private final JFrame frame;
     private final MaandStaatManipulator manipulator;
+    private static String description;
+    private static String selection;
+    private static float hours;
+    private static LocalDate date;
+    private static MainPanel mainPanel;
     @Override
     public void onSuggestionsRequested() {
         System.out.println("MainGui received suggestion event");
@@ -25,13 +30,24 @@ public class MainGui implements MainPanelListener {
 
     @Override
     public void onPublish() {
-                    String description = descriptionField.getText();
-                    float hours = Float.parseFloat(hoursField.getText());
-                    manipulator.updateFile(filePath, hours, description, selection, date);
-                    JOptionPane.showMessageDialog(frame,
-                            "Description: " + description + "\nHours: " + hours,
-                            "Published Task",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    description = mainPanel.getDescription();
+                    hours = mainPanel.getHours();
+                    selection=mainPanel.getSelection();
+                    date = mainPanel.getDate();
+                    System.out.println(date.toString());
+                    try {
+                        manipulator.updateFile(filePath, hours, description, selection, date);
+                        JOptionPane.showMessageDialog(frame,
+                                "Description: " + description + "\nHours: " + hours,
+                                "Published Task",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Failed to update file:\n" + e.getMessage(),
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                    }
     }
 
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
@@ -46,14 +62,14 @@ public class MainGui implements MainPanelListener {
         // Create the main frame
         frame = new JFrame("Maandstaat Incrementer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        StartupDialog dialog = new StartupDialog(frame, filePath, numberOfCustomers);
-        dialog.setVisible(true); // <- This actually shows the dialog
+        StartupDialog startupDialog = new StartupDialog(frame, filePath, numberOfCustomers);
+        startupDialog.setVisible(true); // <- This actually shows the startupDialog
 
         // Only proceed if the user clicked OK
-        if (dialog.isConfirmed()) {
-            dialog.dispose();
-            filePath = dialog.getFilePath();
-            numberOfCustomers = dialog.getNumberOfCustomers();
+        if (startupDialog.isConfirmed()) {
+            startupDialog.dispose();
+            filePath = startupDialog.getFilePath();
+            numberOfCustomers = startupDialog.getNumberOfCustomers();
             configs.set("FILE_PATH", filePath, true);
             configs.set("NUMBER_OF_CUSTOMERS", Integer.toString(numberOfCustomers), true);
 
@@ -71,7 +87,7 @@ public class MainGui implements MainPanelListener {
         }
 
 
-        MainPanel mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
+        mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
         // Show the frame
         frame.setSize(411, 200);
         

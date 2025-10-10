@@ -29,13 +29,16 @@ public class MainPanel extends JPanel {
     private final MainPanelListener listener;
     private final JFrame frame;
     private LocalDate date;
+    private final JFormattedTextField dateField;
+    private final JTextField descriptionField;
+    private final JFormattedTextField hoursField;
 
     public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath,
             MainPanelListener listener, LocalDate date) {
         this.selection = selectedCustomer;
         this.listener = listener;
         this.frame = frame;
-        this.date=date;
+        this.date = date;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -45,20 +48,20 @@ public class MainPanel extends JPanel {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
         JLabel dateLabel = new JLabel("Date (YYYY-MM-DD):");
-        this.add(dateLabel,gbc);
+        this.add(dateLabel, gbc);
         try {
             dateMask = new MaskFormatter("####-##-##");
         } catch (Exception e) {
             System.err.println(e);
         }
         dateMask.setPlaceholderCharacter('_');
-        JFormattedTextField dateField = new JFormattedTextField(dateMask);
+        dateField = new JFormattedTextField(dateMask);
         dateField.setColumns(10);
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         dateField.setText(date.toString());
-        this.add(dateField,gbc);
+        this.add(dateField, gbc);
         // Create a JComboBox fed by the array
         JComboBox<String> customerDropdown = new JComboBox<>(customers);
 
@@ -84,17 +87,14 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.EAST;
         this.add(descriptionLabel, gbc);
 
-        
-        JTextField descriptionField = new JTextField(21);
+        descriptionField = new JTextField(21);
         descriptionField.setText("Enter description here");
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
-        
 
         java.util.List<String> suggestions = Arrays.asList(
-            "Stand Up","Deep Dive","Refinement","Planning","Planning poker"
-        );
+                "Stand Up", "Deep Dive", "Refinement", "Planning", "Planning poker");
         JPopupMenu suggestionMenu = new JPopupMenu();
         descriptionField.addKeyListener(new KeyAdapter() {
             @Override
@@ -138,7 +138,7 @@ public class MainPanel extends JPanel {
         this.add(hoursLabel, gbc);
 
         NumberFormat floatFormat = NumberFormat.getNumberInstance();
-        JFormattedTextField hoursField = new JFormattedTextField(floatFormat);
+        hoursField = new JFormattedTextField(floatFormat);
         hoursField.setColumns(5);
         hoursField.setText("0.5");
         hoursField.setMinimumSize(hoursField.getPreferredSize());
@@ -195,10 +195,22 @@ public class MainPanel extends JPanel {
                             JOptionPane.ERROR_MESSAGE);
                 }
 
-
-
             }
         });
     }
 
+    public String getDescription() {
+        return descriptionField.getText();
+    }
+
+    public float getHours(){
+        return Float.parseFloat(hoursField.getText());
+    }
+
+    public String getSelection(){
+        return selection;
+    }
+    public LocalDate getDate(){
+        return date;
+    }
 }

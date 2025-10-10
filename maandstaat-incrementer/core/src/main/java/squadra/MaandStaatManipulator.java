@@ -73,8 +73,7 @@ public class MaandStaatManipulator {
             Row row = getDateRow(sheet,date);
 
             if (row == null) {
-                System.out.println("Cant find todays date");
-                return;
+                throw new IOException("Date not found");
             }
             Cell descriptionCell = row.getCell(3);
             if (descriptionCell == null) {
@@ -105,6 +104,7 @@ public class MaandStaatManipulator {
 
         } catch (IOException e) {
             e.printStackTrace();
+            
         }
     }
 }
