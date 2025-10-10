@@ -20,6 +20,8 @@ public class MainGui implements MainPanelListener {
     private static LocalDate date;
     private static MainPanel mainPanel;
     private static Map<String, String[]> customerSuggestions;
+    private static SuggestionManager suggestionsMap;
+    private final String[] defaultSuggestions;
 
     @Override
     public void onSuggestionsRequested() {
@@ -55,14 +57,15 @@ public class MainGui implements MainPanelListener {
 
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public MainGui() {
+        defaultSuggestions=new String[]{"Stand Up", "Deep Dive", "Refinement", "Planning", "Planning poker"};
         manipulator= new MaandStaatManipulator();
-
+        suggestionsMap= new SuggestionManager();
         ConfigManager configs = new ConfigManager(".config.properties");
         filePath = configs.get("FILE_PATH", "");
         numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
         String[] customers = new String[numberOfCustomers];
-        
 
+        
         // Create the main frame
         frame = new JFrame("Maandstaat Incrementer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,7 +92,14 @@ public class MainGui implements MainPanelListener {
             System.out.println("Startup canceled.");
             System.exit(0);
         }
-
+        System.out.println("customer");
+        for (String customer:customers){
+            if (!suggestionsMap.doesCustomerExist(customer)){
+                System.out.println(customer);
+                suggestionsMap.setSuggestions(customer, defaultSuggestions);
+            }
+        }
+        System.out.println(suggestionsMap.getCustomerSuggestionsJson());
 
         mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
         // Show the frame
