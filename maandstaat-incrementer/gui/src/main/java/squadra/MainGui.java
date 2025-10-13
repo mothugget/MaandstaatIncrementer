@@ -17,6 +17,8 @@ public class MainGui implements MainPanelListener {
     private static String description;
     private static String selection;
     private static float hours;
+    private static int kilometer;
+    private static String location;
     private static LocalDate date;
     private static MainPanel mainPanel;
     private static Map<String, String[]> customerSuggestions;
@@ -35,37 +37,40 @@ public class MainGui implements MainPanelListener {
 
     @Override
     public void onPublish() {
-                    description = mainPanel.getDescription();
-                    hours = mainPanel.getHours();
-                    selection=mainPanel.getSelection();
-                    date = mainPanel.getDate();
-                    System.out.println(date.toString());
-                    try {
-                        manipulator.updateFile(filePath, hours, description,0,"", selection, date);
-                        JOptionPane.showMessageDialog(frame,
-                                "Description: " + description + "\nHours: " + hours,
-                                "Published Task",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(frame,
-                                "Failed to update file:\n" + e.getMessage(),
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        e.printStackTrace();
-                    }
+        description = mainPanel.getDescriptionValue();
+        hours = mainPanel.getHoursValue();
+        kilometer = mainPanel.getKmValue();
+        mainPanel.resetKmValue();
+        location = mainPanel.getLocationValue();
+        mainPanel.resetLocationValue();    
+        selection = mainPanel.getSelectionValue();
+        date = mainPanel.getDateValue();
+        System.out.println(date.toString());
+        try {
+            manipulator.updateFile(filePath, hours, description, kilometer, location, selection, date);
+            JOptionPane.showMessageDialog(frame,
+                    "Description: " + description + "\nHours: " + hours,
+                    "Published Task",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame,
+                    "Failed to update file:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public MainGui() {
-        defaultSuggestions=new String[]{"Stand Up", "Deep Dive", "Refinement", "Planning", "Planning poker"};
-        manipulator= new MaandStaatManipulator();
-        suggestionsMap= new SuggestionManager();
+        defaultSuggestions = new String[] { "Stand Up", "Deep Dive", "Refinement", "Planning", "Planning poker" };
+        manipulator = new MaandStaatManipulator();
+        suggestionsMap = new SuggestionManager();
         ConfigManager configs = new ConfigManager(".config.properties");
         filePath = configs.get("FILE_PATH", "");
         numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
         String[] customers = new String[numberOfCustomers];
 
-        
         // Create the main frame
         frame = new JFrame("Maandstaat Incrementer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,8 +98,8 @@ public class MainGui implements MainPanelListener {
             System.exit(0);
         }
         System.out.println("customer");
-        for (String customer:customers){
-            if (!suggestionsMap.doesCustomerExist(customer)){
+        for (String customer : customers) {
+            if (!suggestionsMap.doesCustomerExist(customer)) {
                 System.out.println(customer);
                 suggestionsMap.setSuggestions(customer, defaultSuggestions);
             }
@@ -104,7 +109,7 @@ public class MainGui implements MainPanelListener {
         mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
         // Show the frame
         frame.setSize(411, 200);
-        
+
         frame.setContentPane(mainPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);

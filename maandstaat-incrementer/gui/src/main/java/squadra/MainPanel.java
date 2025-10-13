@@ -43,7 +43,7 @@ public class MainPanel extends JPanel {
         this.listener = listener;
         this.frame = frame;
         this.date = date;
-        gridyi =0;
+        gridyi = 0;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -66,8 +66,6 @@ public class MainPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         dateField.setText(date.toString());
         this.add(dateField, gbc);
-        
-        
 
         // Create a JComboBox fed by the array
         JComboBox<String> customerDropdown = new JComboBox<>(customers);
@@ -190,7 +188,7 @@ public class MainPanel extends JPanel {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
-        this.add(locationField,gbc);
+        this.add(locationField, gbc);
 
         JButton suggestionsButton = new JButton("Suggestions");
         gridyi++;
@@ -242,19 +240,39 @@ public class MainPanel extends JPanel {
         });
     }
 
-    public String getDescription() {
+    public String getDescriptionValue() {
         return descriptionField.getText();
     }
 
-    public float getHours(){
-        return Float.parseFloat(hoursField.getText());
+    public float getHoursValue() {
+        Number value = (Number) hoursField.getValue();
+        System.out.println(value);
+        return (value != null) ? value.floatValue() : 0f;
     }
 
-    public String getSelection(){
+    public int getKmValue() {
+        Number value = (Number) kmField.getValue();
+        return (value != null) ? value.intValue() : 0;
+    }
+
+    public String getLocationValue() {
+        return locationField.getText();
+    }
+
+    public String getSelectionValue() {
         return selection;
     }
-    public LocalDate getDate(){
-        String dateString=dateField.getText();
+
+    public LocalDate getDateValue() {
+        String dateString = dateField.getText();
         return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public void resetKmValue() {
+        kmField.setText("");
+    }
+
+    public void resetLocationValue() {
+        locationField.setText("");
     }
 }
