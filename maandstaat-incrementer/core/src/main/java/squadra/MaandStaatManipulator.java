@@ -45,9 +45,10 @@ public class MaandStaatManipulator {
         }
         return todayRow;
     }
-    private String getNewStringCellValue(String oldValue,String newValue, String delimiter){
+
+    private String getNewStringCellValue(String oldValue, String newValue, String delimiter) {
         String delimiterIfNotFirst = (oldValue.equals("") ? "" : delimiter);
-        return oldValue + delimiterIfNotFirst + newValue;       
+        return oldValue + delimiterIfNotFirst + newValue;
     }
 
     public static String[] getCustomers(String filePath, int sheetCount) throws IOException {
@@ -88,11 +89,11 @@ public class MaandStaatManipulator {
             if (hoursCell == null) {
                 hoursCell = row.createCell(4);
             }
-            Cell kilometerCell =row.getCell(5);
+            Cell kilometerCell = row.getCell(5);
             if (kilometerCell == null) {
                 kilometerCell = row.createCell(5);
             }
-            Cell locationCell =row.getCell(6);
+            Cell locationCell = row.getCell(6);
             if (locationCell == null) {
                 locationCell = row.createCell(6);
             }
@@ -100,20 +101,23 @@ public class MaandStaatManipulator {
             float oldHoursValue = (float) hoursCell.getNumericCellValue();
             int oldKilometerValue = (int) kilometerCell.getNumericCellValue();
             String oldLocationValue = locationCell.getStringCellValue();
-            String newDescriptionValue=getNewStringCellValue(oldDescriptionValue, description, "/");
+            String newDescriptionValue = getNewStringCellValue(oldDescriptionValue, description, "/");
             float newHoursValue = oldHoursValue + hours;
-            int newKilometerValue=oldKilometerValue+kilometer;
-            String newLocationValue=getNewStringCellValue(oldLocationValue, location, "/");
-            
+            int newKilometerValue = oldKilometerValue + kilometer;
+            String newLocationValue = getNewStringCellValue(oldLocationValue, location, "/");
 
             System.out.println("Date - " + date.toString());
             System.out.println("New description - " + newDescriptionValue);
             System.out.println("New hours - " + newHoursValue);
-            System.out.println("New km - " + newKilometerValue);
-            System.out.println("New location - " + newLocationValue);
+            if (newKilometerValue > 0) {
+                System.out.println("New km - " + newKilometerValue);
+            }
+            if (!newLocationValue.equals("")) {
+                System.out.println("New location - " + newLocationValue);
+            }
             descriptionCell.setCellValue(newDescriptionValue);
             hoursCell.setCellValue(newHoursValue);
-            if(kilometer>0){
+            if (kilometer > 0) {
                 kilometerCell.setCellValue(newKilometerValue);
             }
             locationCell.setCellValue(newLocationValue);
