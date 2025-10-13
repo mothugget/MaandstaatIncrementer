@@ -67,23 +67,33 @@ public class MainCli {
                             System.err.println("Error: \"days in the past\" must be a number");
                             return;
                         }
+                        break;
                     case "-km":
                         try {
                             kilometer = Integer.parseInt(args[i + 1]);
                         } catch (Exception e) {
                             System.err.println("Error: \"km\" must be a number");
                         }
+                        break;
                     case "-loc":
                         try {
                             location = args[i + 1];
                         } catch (Exception e) {
                             System.err.println("Error: \"location\" must be a string");
                         }
+                        break;
                 }
 
         }
+        String resultsPrint="Customer: " + customer + " | Description: " + description + " | Hours: " + hours;
+        if(kilometer>0){
+            resultsPrint=resultsPrint+" | KM: "+kilometer;
+        }
+        if(!location.equals("")){
+            resultsPrint=resultsPrint+" | Location: "+location;
+        }
 
-        System.out.println("Customer: " + customer + " | Description: " + description + " | Hours: " + hours);
+        System.out.println(resultsPrint);
 
         // Collect arguments into one string
         String input = String.join(" ", args);

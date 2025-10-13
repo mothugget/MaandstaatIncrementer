@@ -109,6 +109,8 @@ public class MaandStaatManipulator {
             System.out.println("Date - " + date.toString());
             System.out.println("New description - " + newDescriptionValue);
             System.out.println("New hours - " + newHoursValue);
+            System.out.println("New km - " + newKilometerValue);
+            System.out.println("New location - " + newLocationValue);
             descriptionCell.setCellValue(newDescriptionValue);
             hoursCell.setCellValue(newHoursValue);
             if(kilometer>0){
