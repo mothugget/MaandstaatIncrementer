@@ -17,15 +17,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 public class SuggestionsDialog extends JDialog {
+    private final SuggestionsDialogListener suggestionsDialogListener;
 
-    public SuggestionsDialog(JFrame frame,String customer, String [] suggestions) {
+    public SuggestionsDialog(JFrame frame,String customer, String [] suggestions,SuggestionsDialogListener suggestionsDialogListener) {
         super(frame, "Set up suggestions", true);
-
+        this.suggestionsDialogListener=suggestionsDialogListener;
         String[] columns = { customer };
-        Object[][] data = java.util.Arrays.stream(suggestions)
-        .map(s -> new Object[]{s})
-        .toArray(Object[][]::new);
-
+        Object[][] data = java.util.stream.Stream.concat(
+            java.util.Arrays.stream(suggestions).map(s -> new Object[]{s}),
+            java.util.stream.Stream.<Object[]>of(new Object[]{})
+        ).toArray(Object[][]::new);
+        for (Object[] row : data) {
+            System.out.println(java.util.Arrays.toString(row));
+        }
         DefaultTableModel suggestionsTableModel = new DefaultTableModel(data, columns) {
             // Make all cells editable
             @Override
@@ -84,12 +88,7 @@ public class SuggestionsDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
         // Button actions
         okButton.addActionListener(e -> {
-            for (int i = 0; i < model.getRowCount(); i++) {
-                Object value = model.getValueAt(i, 0);
-                if (value != null && !value.toString().trim().isEmpty()) {
-                    System.out.println("Suggestion " + i + ": " + value);
-                }
-            }
+            suggestionsDialogListener.onOk(customer, model);
             dispose();
         });
 

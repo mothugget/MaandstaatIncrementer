@@ -27,7 +27,7 @@ import javax.swing.text.MaskFormatter;
 public class MainPanel extends JPanel {
     private String selectedCustomer;
     private MaskFormatter dateMask;
-    private final MainPanelListener listener;
+    private final MainPanelListener mainPanelListener;
     private final JFrame frame;
     private LocalDate date;
     private final JFormattedTextField dateField;
@@ -38,8 +38,8 @@ public class MainPanel extends JPanel {
     private static int gridyi;
 
     public MainPanel(JFrame frame, String[] customers, String filePath,
-            MainPanelListener listener, LocalDate date) {
-        this.listener = listener;
+            MainPanelListener mainPanelListener, LocalDate date) {
+        this.mainPanelListener = mainPanelListener;
         this.frame = frame;
         this.date = date;
         gridyi = 0;
@@ -196,13 +196,13 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(suggestionsButton, gbc);
-        // Action listener for button
+        // Action mainPanelListener for button
         suggestionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 try {
-                    if (listener != null) {
-                        listener.onSuggestionsRequested();
+                    if (mainPanelListener != null) {
+                        mainPanelListener.onSuggestionsRequested();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -219,13 +219,13 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(publishButton, gbc);
-        // Action listener for button
+        // Action mainPanelListener for button
         publishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 try {
-                    if (listener != null) {
-                        listener.onPublish();
+                    if (mainPanelListener != null) {
+                        mainPanelListener.onPublish();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

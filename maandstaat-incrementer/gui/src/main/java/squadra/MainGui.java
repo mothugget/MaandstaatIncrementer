@@ -6,8 +6,9 @@ import java.time.LocalDate;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
-public class MainGui implements MainPanelListener {
+public class MainGui implements MainPanelListener,SuggestionsDialogListener {
     private static String filePath;
     private static int numberOfCustomers;
     private final JFrame frame;
@@ -21,6 +22,7 @@ public class MainGui implements MainPanelListener {
     private static MainPanel mainPanel;
     private static SuggestionManager suggestionsMap;
     private final String[] defaultSuggestions;
+    private final ConfigManager configs;
 
     @Override
     public void onSuggestionsRequested() {
@@ -28,7 +30,7 @@ public class MainGui implements MainPanelListener {
         selectedCustomer = mainPanel.getSelectedCustomerValue();
         String[] suggestions = suggestionsMap.getSuggestions(selectedCustomer);
         System.out.println(selectedCustomer);
-        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame, selectedCustomer, suggestions);
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame, selectedCustomer, suggestions, this);
         suggestionDialog.setSize(300, 500);
         suggestionDialog.setLocationRelativeTo(null);
         suggestionDialog.setVisible(true);
@@ -61,14 +63,29 @@ public class MainGui implements MainPanelListener {
         }
     }
 
+    @Override
+    public void onOk(String customer,DefaultTableModel model) {
+        System.out.println(customer);
+        int rowCount=model.getRowCount();
+        String[] dirtySuggestions=new String[rowCount];
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Object value = model.getValueAt(i, 0);
+            dirtySuggestions[i]=value.toString();
+        }
+        suggestionsMap.setSuggestions(customer, dirtySuggestions);
+        for (String sug:dirtySuggestions)
+        {System.out.println(sug);}
+        configs.set("CUSTOMER_SUGGESTIONS", suggestionsMap.getCustomerSuggestionsJson(), true);
+    }
+
     // "/Users/karlfredriksson/Documents/Maandstaat/MaaandstaatDemo.xlsm"
     public MainGui() {
         defaultSuggestions = new String[] { "Stand Up", "Deep Dive", "Refinement", "Planning", "Planning poker" };
         manipulator = new MaandStaatManipulator();
         suggestionsMap = new SuggestionManager();
-        ConfigManager configs = new ConfigManager(".config.properties");
+        configs = new ConfigManager(".config.properties");
         filePath = configs.get("FILE_PATH", "");
-        numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "2"));
+        numberOfCustomers = Integer.parseInt(configs.get("NUMBER_OF_CUSTOMERS", "1"));
         String[] customers = new String[numberOfCustomers];
 
         // Create the main frame
