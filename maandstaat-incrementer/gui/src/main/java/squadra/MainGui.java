@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class MainGui implements MainPanelListener,SuggestionsDialogListener {
+public class MainGui implements MainPanelListener, SuggestionsDialogListener {
     private static String filePath;
     private static int numberOfCustomers;
     private final JFrame frame;
@@ -64,17 +64,16 @@ public class MainGui implements MainPanelListener,SuggestionsDialogListener {
     }
 
     @Override
-    public void onOk(String customer,DefaultTableModel model) {
+    public void onOk(String customer, DefaultTableModel model) {
         System.out.println(customer);
-        int rowCount=model.getRowCount();
-        String[] dirtySuggestions=new String[rowCount];
+        int rowCount = model.getRowCount();
+        String[] dirtySuggestions = new String[rowCount];
         for (int i = 0; i < model.getRowCount(); i++) {
             Object value = model.getValueAt(i, 0);
-            dirtySuggestions[i]=value.toString();
+            System.out.println(value);
+            dirtySuggestions[i] = value != null ?value.toString():"";
         }
         suggestionsMap.setSuggestions(customer, dirtySuggestions);
-        for (String sug:dirtySuggestions)
-        {System.out.println(sug);}
         configs.set("CUSTOMER_SUGGESTIONS", suggestionsMap.getCustomerSuggestionsJson(), true);
     }
 
@@ -134,7 +133,7 @@ public class MainGui implements MainPanelListener,SuggestionsDialogListener {
 
         System.out.println(suggestionsMap.getCustomerSuggestionsJson());
 
-        mainPanel = new MainPanel(frame, customers, filePath, this, LocalDate.now());
+        mainPanel = new MainPanel(frame, customers, filePath, this, LocalDate.now(), suggestionsMap);
         // Show the frame
         frame.setSize(411, 200);
 

@@ -28,6 +28,7 @@ public class MainPanel extends JPanel {
     private String selectedCustomer;
     private MaskFormatter dateMask;
     private final MainPanelListener mainPanelListener;
+    private final SuggestionManager suggestionsMap;
     private final JFrame frame;
     private LocalDate date;
     private final JFormattedTextField dateField;
@@ -36,12 +37,14 @@ public class MainPanel extends JPanel {
     private final JFormattedTextField kmField;
     private final JTextField locationField;
     private static int gridyi;
+    private java.util.List<String> suggestions;
 
     public MainPanel(JFrame frame, String[] customers, String filePath,
-            MainPanelListener mainPanelListener, LocalDate date) {
+            MainPanelListener mainPanelListener, LocalDate date, SuggestionManager suggestionsMap) {
         this.mainPanelListener = mainPanelListener;
         this.frame = frame;
         this.date = date;
+        this.suggestionsMap=suggestionsMap;
         gridyi = 0;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -99,8 +102,7 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
 
-        java.util.List<String> suggestions = Arrays.asList(
-                "Stand Up", "Deep Dive", "Refinement", "Planning", "Planning poker");
+        
         JPopupMenu suggestionMenu = new JPopupMenu();
         descriptionField.addKeyListener(new KeyAdapter() {
             @Override
@@ -113,7 +115,7 @@ public class MainPanel extends JPanel {
                     return;
                 }
 
-                // Filter matching suggestions
+                suggestions=Arrays.asList(suggestionsMap.getSuggestions(selectedCustomer));
                 suggestions.stream()
                         .filter(s -> s.toLowerCase().startsWith(text))
                         .forEach(s -> {
@@ -238,7 +240,7 @@ public class MainPanel extends JPanel {
             }
         });
     }
-
+    
     public String getDescriptionValue() {
         return descriptionField.getText();
     }
