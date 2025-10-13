@@ -64,15 +64,21 @@ public class MainCli {
             }
 
         }
+        int kilometer = 0;
+        String location = "";
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-ditp")) {
-                try {
-                    daysInThePast = Integer.parseInt(args[i + 1]);
-                } catch (NumberFormatException e) {
-                    System.err.println("Error: \"days in the past\" must be a number");
-                    return;
-                }
+            switch (args[i]) {
+                case "-ditp":
+                    try {
+                        daysInThePast = Integer.parseInt(args[i + 1]);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error: \"days in the past\" must be a number");
+                        return;
+                    }
+                case "-trvl":
+                    if (args.length<i+2 || {args[i+2] is an int?})
             }
+
         }
 
         System.out.println("Customer: " + customer + " | Description: " + description + " | Hours: " + hours);

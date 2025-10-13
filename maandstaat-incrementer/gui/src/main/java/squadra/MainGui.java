@@ -41,7 +41,7 @@ public class MainGui implements MainPanelListener {
                     date = mainPanel.getDate();
                     System.out.println(date.toString());
                     try {
-                        manipulator.updateFile(filePath, hours, description, selection, date);
+                        manipulator.updateFile(filePath, hours, description,0,"", selection, date);
                         JOptionPane.showMessageDialog(frame,
                                 "Description: " + description + "\nHours: " + hours,
                                 "Published Task",

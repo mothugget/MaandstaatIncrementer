@@ -28,7 +28,7 @@ public class MaandStaatManipulator {
         }
     }
 
-    private Row getDateRow(Sheet sheet,LocalDate date) {
+    private Row getDateRow(Sheet sheet, LocalDate date) {
         Row todayRow = null;
         for (Row row : sheet) {
             Cell cell = row.getCell(1);
@@ -45,6 +45,10 @@ public class MaandStaatManipulator {
         }
         return todayRow;
     }
+    private String getNewStringCellValue(String oldValue,String newValue, String delimiter){
+        String delimiterIfNotFirst = (oldValue.equals("") ? "" : delimiter);
+        return oldValue + delimiterIfNotFirst + newValue;       
+    }
 
     public static String[] getCustomers(String filePath, int sheetCount) throws IOException {
         try (FileInputStream fis = new FileInputStream(filePath);
@@ -59,7 +63,8 @@ public class MaandStaatManipulator {
         }
     }
 
-    public void updateFile(String filePath, float hours, String description, String customer, LocalDate date) throws Exception{
+    public void updateFile(String filePath, float hours, String description, int kilometer, String location,
+            String customer, LocalDate date) throws Exception {
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -70,7 +75,7 @@ public class MaandStaatManipulator {
                 System.out.println("Customer not found! Check sheet name");
                 return;
             }
-            Row row = getDateRow(sheet,date);
+            Row row = getDateRow(sheet, date);
 
             if (row == null) {
                 throw new IOException("Date not found");
@@ -83,17 +88,33 @@ public class MaandStaatManipulator {
             if (hoursCell == null) {
                 hoursCell = row.createCell(4);
             }
+            Cell kilometerCell =row.getCell(5);
+            if (kilometerCell == null) {
+                kilometerCell = row.createCell(5);
+            }
+            Cell locationCell =row.getCell(6);
+            if (locationCell == null) {
+                locationCell = row.createCell(6);
+            }
             String oldDescriptionValue = descriptionCell.getStringCellValue();
             float oldHoursValue = (float) hoursCell.getNumericCellValue();
-            String delimiter = (oldDescriptionValue == "") ? "" : "/";
-
-            String newDescriptionValue = oldDescriptionValue + delimiter + description;
+            int oldKilometerValue = (int) kilometerCell.getNumericCellValue();
+            String oldLocationValue = locationCell.getStringCellValue();
+            String newDescriptionValue=getNewStringCellValue(oldDescriptionValue, description, "/");
             float newHoursValue = oldHoursValue + hours;
-            System.out.println("Date - "+date.toString());
+            int newKilometerValue=oldKilometerValue+kilometer;
+            String newLocationValue=getNewStringCellValue(oldLocationValue, location, "/");
+            
+
+            System.out.println("Date - " + date.toString());
             System.out.println("New description - " + newDescriptionValue);
             System.out.println("New hours - " + newHoursValue);
             descriptionCell.setCellValue(newDescriptionValue);
             hoursCell.setCellValue(newHoursValue);
+            if(kilometer>0){
+                kilometerCell.setCellValue(newKilometerValue);
+            }
+            locationCell.setCellValue(newLocationValue);
 
             // Save back to the same file
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
@@ -104,7 +125,7 @@ public class MaandStaatManipulator {
 
         } catch (Exception e) {
             throw e;
-            
+
         }
     }
 }
