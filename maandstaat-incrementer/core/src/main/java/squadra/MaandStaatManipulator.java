@@ -64,7 +64,19 @@ public class MaandStaatManipulator {
         }
     }
 
-    public void updateFile(String filePath, float hours, String description, int kilometer, String location,
+    private String updateResults(LocalDate date, String newDescription, float newHours, int kilometer, int newKilometer,
+            String location, String newLocation) {
+        String results = "Date: " + date.toString() + "\nDescription: " + newDescription + "\nHours: " + newHours;
+        if (kilometer > 0) {
+            results = results + "\nKM: " + kilometer;
+        }
+        if (!location.equals("")) {
+            results = results + "\nLocation: " + location;
+        }
+        return results;
+    }
+
+    public String updateFile(String filePath, float hours, String description, int kilometer, String location,
             String customer, LocalDate date) throws Exception {
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
@@ -74,7 +86,7 @@ public class MaandStaatManipulator {
 
             if (sheet == null) {
                 System.out.println("Customer not found! Check sheet name");
-                return;
+                return "Customer not found! Check sheet name";
             }
             Row row = getDateRow(sheet, date);
 
@@ -107,20 +119,21 @@ public class MaandStaatManipulator {
             String newLocationValue = getNewStringCellValue(oldLocationValue, location, "/");
 
             System.out.println("Date - " + date.toString());
-            System.out.println("New description - " + newDescriptionValue);
-            System.out.println("New hours - " + newHoursValue);
-            if (newKilometerValue > 0) {
-                System.out.println("New km - " + newKilometerValue);
-            }
-            if (!newLocationValue.equals("")) {
-                System.out.println("New location - " + newLocationValue);
-            }
+
             descriptionCell.setCellValue(newDescriptionValue);
+            System.out.println("New description - " + newDescriptionValue);
+
             hoursCell.setCellValue(newHoursValue);
+            System.out.println("New hours - " + newHoursValue);
             if (kilometer > 0) {
                 kilometerCell.setCellValue(newKilometerValue);
+                System.out.println("New km - " + newKilometerValue);
             }
-            locationCell.setCellValue(newLocationValue);
+
+            if (!location.equals("")) {
+                locationCell.setCellValue(newLocationValue);
+                System.out.println("New location - " + newLocationValue);
+            }
 
             // Save back to the same file
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
@@ -128,6 +141,8 @@ public class MaandStaatManipulator {
             }
 
             System.out.println("Maanstaat updated successfully!");
+            return updateResults(date, newDescriptionValue, newHoursValue, kilometer, newKilometerValue, location,
+                    newLocationValue);
 
         } catch (Exception e) {
             throw e;

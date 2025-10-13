@@ -148,7 +148,7 @@ public class MainPanel extends JPanel {
         NumberFormat floatFormat = NumberFormat.getNumberInstance();
         hoursField = new JFormattedTextField(floatFormat);
         hoursField.setColumns(5);
-        hoursField.setText("0.5");
+        hoursField.setValue(0.5);
         hoursField.setMinimumSize(hoursField.getPreferredSize());
         hoursField.setMaximumSize(hoursField.getPreferredSize());
         gbc.gridx = 1;
@@ -246,7 +246,6 @@ public class MainPanel extends JPanel {
 
     public float getHoursValue() {
         Number value = (Number) hoursField.getValue();
-        System.out.println(value);
         return (value != null) ? value.floatValue() : 0f;
     }
 
@@ -269,10 +268,11 @@ public class MainPanel extends JPanel {
     }
 
     public void resetKmValue() {
+        kmField.setValue(0);
         kmField.setText("");
     }
 
     public void resetLocationValue() {
-        locationField.setText("");
+        locationField.setText(null);
     }
 }

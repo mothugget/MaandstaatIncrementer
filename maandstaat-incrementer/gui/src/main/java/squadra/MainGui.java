@@ -42,14 +42,14 @@ public class MainGui implements MainPanelListener {
         kilometer = mainPanel.getKmValue();
         mainPanel.resetKmValue();
         location = mainPanel.getLocationValue();
-        mainPanel.resetLocationValue();    
+        mainPanel.resetLocationValue();
         selection = mainPanel.getSelectionValue();
         date = mainPanel.getDateValue();
-        System.out.println(date.toString());
         try {
-            manipulator.updateFile(filePath, hours, description, kilometer, location, selection, date);
+            String dialogText = manipulator.updateFile(filePath, hours, description, kilometer, location, selection,
+                    date);
             JOptionPane.showMessageDialog(frame,
-                    "Description: " + description + "\nHours: " + hours,
+                    dialogText,
                     "Published Task",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
