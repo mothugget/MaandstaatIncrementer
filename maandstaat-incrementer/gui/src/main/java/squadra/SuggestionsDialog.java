@@ -18,10 +18,10 @@ import javax.swing.table.JTableHeader;
 
 public class SuggestionsDialog extends JDialog {
 
-    public SuggestionsDialog(JFrame frame, String [] suggestions) {
+    public SuggestionsDialog(JFrame frame,String customer, String [] suggestions) {
         super(frame, "Set up suggestions", true);
 
-        String[] columns = { "Suggestions" };
+        String[] columns = { customer };
         Object[][] data = java.util.Arrays.stream(suggestions)
         .map(s -> new Object[]{s})
         .toArray(Object[][]::new);

@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
 public class MainPanel extends JPanel {
-    private String selection;
+    private String selectedCustomer;
     private MaskFormatter dateMask;
     private final MainPanelListener listener;
     private final JFrame frame;
@@ -37,9 +37,8 @@ public class MainPanel extends JPanel {
     private final JTextField locationField;
     private static int gridyi;
 
-    public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath,
+    public MainPanel(JFrame frame, String[] customers, String filePath,
             MainPanelListener listener, LocalDate date) {
-        this.selection = selectedCustomer;
         this.listener = listener;
         this.frame = frame;
         this.date = date;
@@ -80,10 +79,10 @@ public class MainPanel extends JPanel {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         this.add(customerDropdown, gbc);
-        selection = (String) customerDropdown.getSelectedItem();
+        selectedCustomer = (String) customerDropdown.getSelectedItem();
         customerDropdown.addActionListener(e -> {
-            selection = (String) customerDropdown.getSelectedItem();
-            System.out.println("Selected customer: " + selection);
+            selectedCustomer = (String) customerDropdown.getSelectedItem();
+            System.out.println("Selected customer: " + selectedCustomer);
         });
 
         // Description label and text field
@@ -258,8 +257,8 @@ public class MainPanel extends JPanel {
         return locationField.getText();
     }
 
-    public String getSelectionValue() {
-        return selection;
+    public String getSelectedCustomerValue() {
+        return selectedCustomer;
     }
 
     public LocalDate getDateValue() {

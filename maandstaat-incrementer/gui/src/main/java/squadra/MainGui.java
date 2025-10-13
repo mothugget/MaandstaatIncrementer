@@ -2,7 +2,6 @@ package squadra;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -10,26 +9,26 @@ import javax.swing.SwingUtilities;
 
 public class MainGui implements MainPanelListener {
     private static String filePath;
-    private static String selectedCustomer;
     private static int numberOfCustomers;
     private final JFrame frame;
     private final MaandStaatManipulator manipulator;
     private static String description;
-    private static String selection;
+    private static String selectedCustomer;
     private static float hours;
     private static int kilometer;
     private static String location;
     private static LocalDate date;
     private static MainPanel mainPanel;
-    private static Map<String, String[]> customerSuggestions;
     private static SuggestionManager suggestionsMap;
     private final String[] defaultSuggestions;
 
     @Override
     public void onSuggestionsRequested() {
         System.out.println("MainGui received suggestion event");
-
-        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame, defaultSuggestions);
+        selectedCustomer = mainPanel.getSelectedCustomerValue();
+        String[] suggestions = suggestionsMap.getSuggestions(selectedCustomer);
+        System.out.println(selectedCustomer);
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame, selectedCustomer, suggestions);
         suggestionDialog.setSize(300, 500);
         suggestionDialog.setLocationRelativeTo(null);
         suggestionDialog.setVisible(true);
@@ -43,10 +42,11 @@ public class MainGui implements MainPanelListener {
         mainPanel.resetKmValue();
         location = mainPanel.getLocationValue();
         mainPanel.resetLocationValue();
-        selection = mainPanel.getSelectionValue();
+        selectedCustomer = mainPanel.getSelectedCustomerValue();
         date = mainPanel.getDateValue();
         try {
-            String dialogText = manipulator.updateFile(filePath, hours, description, kilometer, location, selection,
+            String dialogText = manipulator.updateFile(filePath, hours, description, kilometer, location,
+                    selectedCustomer,
                     date);
             JOptionPane.showMessageDialog(frame,
                     dialogText,
@@ -104,6 +104,7 @@ public class MainGui implements MainPanelListener {
             suggestionsMap.setCustomerSuggestionsFromJson(customerSuggestionsJson);
         } catch (Exception e) {
             System.err.println(e);
+            return;
         }
         for (String customer : customers) {
 
@@ -116,7 +117,7 @@ public class MainGui implements MainPanelListener {
 
         System.out.println(suggestionsMap.getCustomerSuggestionsJson());
 
-        mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
+        mainPanel = new MainPanel(frame, customers, filePath, this, LocalDate.now());
         // Show the frame
         frame.setSize(411, 200);
 
