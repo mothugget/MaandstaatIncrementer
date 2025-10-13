@@ -55,29 +55,31 @@ public class MainCli {
         String customer = args[0];
         String description = args[1];
 
-        if (args.length > 2 && !args[2].equals("-ditp")) {
-            try {
-                hours = Float.parseFloat(args[2]);
-            } catch (NumberFormatException e) {
-                System.err.println("Error: hours must be a number");
-                return;
-            }
-
-        }
         int kilometer = 0;
         String location = "";
         for (int i = 0; i < args.length; i++) {
-            switch (args[i]) {
-                case "-ditp":
-                    try {
-                        daysInThePast = Integer.parseInt(args[i + 1]);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error: \"days in the past\" must be a number");
-                        return;
-                    }
-                case "-trvl":
-                    if (args.length<i+2 || {args[i+2] is an int?})
-            }
+            if (i > 1)
+                switch (args[i]) {
+                    case "-ditp":
+                        try {
+                            daysInThePast = Integer.parseInt(args[i + 1]);
+                        } catch (Exception e) {
+                            System.err.println("Error: \"days in the past\" must be a number");
+                            return;
+                        }
+                    case "-km":
+                        try {
+                            kilometer = Integer.parseInt(args[i + 1]);
+                        } catch (Exception e) {
+                            System.err.println("Error: \"km\" must be a number");
+                        }
+                    case "-loc":
+                        try {
+                            location = args[i + 1];
+                        } catch (Exception e) {
+                            System.err.println("Error: \"location\" must be a string");
+                        }
+                }
 
         }
 
@@ -89,7 +91,7 @@ public class MainCli {
         // Append to log.txt
         LocalDate date = today.plusDays(-daysInThePast);
         try {
-            manipulator.updateFile(filePath, hours, description, customer, date);
+            manipulator.updateFile(filePath, hours, description,kilometer,location, customer, date);
         } catch (Exception e) {
             System.err.println(e);
         }
