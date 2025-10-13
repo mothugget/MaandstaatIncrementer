@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import javax.swing.JButton;
@@ -22,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
-import java.time.format.DateTimeFormatter;
 
 public class MainPanel extends JPanel {
     private String selection;
@@ -33,6 +33,7 @@ public class MainPanel extends JPanel {
     private final JFormattedTextField dateField;
     private final JTextField descriptionField;
     private final JFormattedTextField hoursField;
+    private static int gridyi;
 
     public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath,
             MainPanelListener listener, LocalDate date) {
@@ -40,13 +41,13 @@ public class MainPanel extends JPanel {
         this.listener = listener;
         this.frame = frame;
         this.date = date;
+        gridyi =0;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.insets = new Insets(5, 5, 5, 5); // spacing
-
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = gridyi;
         gbc.anchor = GridBagConstraints.EAST;
         JLabel dateLabel = new JLabel("Date (YYYY-MM-DD):");
         this.add(dateLabel, gbc);
@@ -70,8 +71,9 @@ public class MainPanel extends JPanel {
         JComboBox<String> customerDropdown = new JComboBox<>(customers);
 
         // Add to your frame (or panel)
+        gridyi++;
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = gridyi;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(new JLabel("Customer:"), gbc);
 
@@ -86,8 +88,9 @@ public class MainPanel extends JPanel {
 
         // Description label and text field
         JLabel descriptionLabel = new JLabel("Description:");
+        gridyi++;
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = gridyi;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(descriptionLabel, gbc);
 
@@ -134,9 +137,10 @@ public class MainPanel extends JPanel {
         this.add(descriptionField, gbc);
         // Hours label and text field
         JLabel hoursLabel = new JLabel("Hours:");
+        gridyi++;
         gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridy = gridyi;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
         this.add(hoursLabel, gbc);
@@ -154,8 +158,9 @@ public class MainPanel extends JPanel {
         this.add(hoursField, gbc);
 
         JButton suggestionsButton = new JButton("Suggestions");
+        gridyi++;
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = gridyi;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(suggestionsButton, gbc);
@@ -179,7 +184,6 @@ public class MainPanel extends JPanel {
         // Publish button
         JButton publishButton = new JButton("Publish");
         gbc.gridx = 2;
-        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         this.add(publishButton, gbc);
