@@ -33,6 +33,8 @@ public class MainPanel extends JPanel {
     private final JFormattedTextField dateField;
     private final JTextField descriptionField;
     private final JFormattedTextField hoursField;
+    private final JFormattedTextField kmField;
+    private final JTextField locationField;
     private static int gridyi;
 
     public MainPanel(JFrame frame, String selectedCustomer, String[] customers, String filePath,
@@ -95,7 +97,7 @@ public class MainPanel extends JPanel {
         this.add(descriptionLabel, gbc);
 
         descriptionField = new JTextField(21);
-        descriptionField.setText("Enter description here");
+        descriptionField.setText("Test");
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
@@ -156,6 +158,39 @@ public class MainPanel extends JPanel {
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
         this.add(hoursField, gbc);
+
+        JLabel kmLabel = new JLabel("KM:");
+        gridyi++;
+        gbc.gridx = 0;
+        gbc.gridy = gridyi;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        this.add(kmLabel, gbc);
+
+        NumberFormat intFormat = NumberFormat.getIntegerInstance();
+        kmField = new JFormattedTextField(intFormat);
+        kmField.setColumns(5);
+        kmField.setMinimumSize(kmField.getPreferredSize());
+        kmField.setMaximumSize(kmField.getPreferredSize());
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        this.add(kmField, gbc);
+
+        JLabel locationLabel = new JLabel("Location:");
+        gridyi++;
+        gbc.gridx = 0;
+        gbc.gridy = gridyi;
+        gbc.anchor = GridBagConstraints.WEST;
+        this.add(locationLabel, gbc);
+
+        locationField = new JTextField(21);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 1.0;
+        this.add(locationField,gbc);
 
         JButton suggestionsButton = new JButton("Suggestions");
         gridyi++;
