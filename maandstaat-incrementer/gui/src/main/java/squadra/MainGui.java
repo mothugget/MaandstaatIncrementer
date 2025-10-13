@@ -29,7 +29,7 @@ public class MainGui implements MainPanelListener {
     public void onSuggestionsRequested() {
         System.out.println("MainGui received suggestion event");
 
-        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame,defaultSuggestions);
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame, defaultSuggestions);
         suggestionDialog.setSize(300, 500);
         suggestionDialog.setLocationRelativeTo(null);
         suggestionDialog.setVisible(true);
@@ -98,12 +98,22 @@ public class MainGui implements MainPanelListener {
             System.exit(0);
         }
         System.out.println("customer");
+
+        String customerSuggestionsJson = configs.get("CUSTOMER_SUGGESTIONS", "{}");
+        try {
+            suggestionsMap.setCustomerSuggestionsFromJson(customerSuggestionsJson);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
         for (String customer : customers) {
+
             if (!suggestionsMap.doesCustomerExist(customer)) {
                 System.out.println(customer);
                 suggestionsMap.setSuggestions(customer, defaultSuggestions);
             }
         }
+        configs.set("CUSTOMER_SUGGESTIONS", suggestionsMap.getCustomerSuggestionsJson(), true);
+
         System.out.println(suggestionsMap.getCustomerSuggestionsJson());
 
         mainPanel = new MainPanel(frame, selectedCustomer, customers, filePath, this, LocalDate.now());
