@@ -29,7 +29,7 @@ public class MainGui implements MainPanelListener {
     public void onSuggestionsRequested() {
         System.out.println("MainGui received suggestion event");
 
-        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame);
+        SuggestionsDialog suggestionDialog = new SuggestionsDialog(frame,defaultSuggestions);
         suggestionDialog.setSize(300, 500);
         suggestionDialog.setLocationRelativeTo(null);
         suggestionDialog.setVisible(true);

@@ -1,6 +1,7 @@
 package squadra;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,15 +15,16 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import java.awt.Font;
 
 public class SuggestionsDialog extends JDialog {
 
-    public SuggestionsDialog(JFrame frame) {
+    public SuggestionsDialog(JFrame frame, String [] suggestions) {
         super(frame, "Set up suggestions", true);
 
         String[] columns = { "Suggestions" };
-        Object[][] data = { { "suggestion1" }, { "suggestion2" }, { "" } };
+        Object[][] data = java.util.Arrays.stream(suggestions)
+        .map(s -> new Object[]{s})
+        .toArray(Object[][]::new);
 
         DefaultTableModel suggestionsTableModel = new DefaultTableModel(data, columns) {
             // Make all cells editable
