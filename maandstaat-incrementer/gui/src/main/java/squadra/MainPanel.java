@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 
 public class MainPanel extends JPanel {
@@ -44,7 +45,7 @@ public class MainPanel extends JPanel {
         this.mainPanelListener = mainPanelListener;
         this.frame = frame;
         this.date = date;
-        this.suggestionsMap=suggestionsMap;
+        this.suggestionsMap = suggestionsMap;
         gridyi = 0;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -102,11 +103,11 @@ public class MainPanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
 
-        
         JPopupMenu suggestionMenu = new JPopupMenu();
         descriptionField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
+                suggestionMenu.setFocusable(false);
                 String text = descriptionField.getText().trim().toLowerCase();
                 suggestionMenu.removeAll();
 
@@ -114,8 +115,8 @@ public class MainPanel extends JPanel {
                     suggestionMenu.setVisible(false);
                     return;
                 }
-
-                suggestions=Arrays.asList(suggestionsMap.getSuggestions(selectedCustomer));
+                int caretPos = descriptionField.getCaretPosition();
+                suggestions = Arrays.asList(suggestionsMap.getSuggestions(selectedCustomer));
                 suggestions.stream()
                         .filter(s -> s.toLowerCase().startsWith(text))
                         .forEach(s -> {
@@ -132,6 +133,10 @@ public class MainPanel extends JPanel {
                 } else {
                     suggestionMenu.setVisible(false);
                 }
+                SwingUtilities.invokeLater(() -> {
+                    descriptionField.requestFocusInWindow();
+                    descriptionField.setCaretPosition(Math.min(caretPos, descriptionField.getText().length()));
+                });
             }
         });
 
@@ -240,7 +245,7 @@ public class MainPanel extends JPanel {
             }
         });
     }
-    
+
     public String getDescriptionValue() {
         return descriptionField.getText();
     }
