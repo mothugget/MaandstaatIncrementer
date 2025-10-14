@@ -82,6 +82,15 @@ public class MainCli {
                             System.err.println("Error: \"location\" must be a string");
                         }
                     }
+                    default->{
+                        if(i==2){
+                            try {
+                                hours=Float.parseFloat(args[i]);
+                            }catch (Exception e){
+                                System.err.println(e);
+                            }
+                        }
+                    }
                 }
 
         }
